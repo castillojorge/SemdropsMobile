@@ -1,0 +1,14 @@
+{% block title %} Semdrops Mobile - Results {% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+	Categories of the wiki <b>{{ filledLink.getUri() }}</b>:<br>
+	{% for result in filledLink.getCategories() %}
+		{{ result }}<br>
+	{% else %} {# fallback, if empty array or not defined #}
+		No categories.<br>
+	{% endfor %}
+	<input type= "button" onclick= "location.href='{{ path('addCategory') }}'" value="Add a Category" name="addCategoryButton" /><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" />
+
+{% endblock %}
+

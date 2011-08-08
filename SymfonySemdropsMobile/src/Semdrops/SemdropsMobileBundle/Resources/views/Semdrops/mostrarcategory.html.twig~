@@ -1,0 +1,8 @@
+<link href="{{ asset('iphone.css') }}" rel="stylesheet" type="text/css" />
+{% block title %} My Category {% endblock %}<br>
+{% block body %}
+    Uri: {{ form.uri() }} <br>
+    Category: {{ form.category() }} <br>
+
+
+{% endblock %}

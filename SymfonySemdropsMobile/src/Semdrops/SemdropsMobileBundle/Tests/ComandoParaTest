@@ -1,0 +1,3 @@
+/var/www/SymfonySemdropsMobile$ phpunit -c app src/Semdrops/SemdropsMobileBundle/Tests/writeInSesameDataBaseTest.php
+
+Libreria cUrl sudo apt-get install php5-curl 

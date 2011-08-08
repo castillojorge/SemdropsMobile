@@ -1,0 +1,17 @@
+<link href="{{ asset('iphone.css') }}" rel="stylesheet" type="text/css" />
+<form action="/addcategoryphp" method="POST" {{form_enctype(form)}}>
+   {{form_label(form.uri,'Here go your uri: ')}} 
+   <br>
+   {{form_widget(form.uri)}}
+   <br>
+   {{form_label(form.category,'Here go your category: ')}}
+   <br>
+   {{form_widget(form.category)}}
+   <br>
+   <br><input type="submit" value ="Add"/>
+   <input type="reset" value="Clear"><br><br>
+
+
+   
+</form>
+
