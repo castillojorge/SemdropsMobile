@@ -25,21 +25,28 @@ use Assetic\Filter\FilterInterface;
 abstract class BaseAsset implements AssetInterface
 {
     private $filters;
-    private $sourceUrl;
-    private $targetUrl;
+    private $sourceRoot;
+    private $sourcePath;
+    private $targetPath;
     private $content;
     private $loaded;
 
     /**
      * Constructor.
      *
-     * @param array  $filters   Filters for the asset
-     * @param string $sourceUrl The source URL
+     * @param array $filters Filters for the asset
      */
-    public function __construct($filters = array(), $sourceUrl = null)
+    public function __construct($filters = array(), $sourceRoot = null, $sourcePath = null)
     {
         $this->filters = new FilterCollection($filters);
-        $this->sourceUrl = $sourceUrl;
+        $this->sourceRoot = $sourceRoot;
+        $this->sourcePath = $sourcePath;
+        $this->loaded = false;
+    }
+
+    public function __clone()
+    {
+        $this->filters = clone $this->filters;
     }
 
     public function ensureFilter(FilterInterface $filter)
@@ -50,6 +57,11 @@ abstract class BaseAsset implements AssetInterface
     public function getFilters()
     {
         return $this->filters->all();
+    }
+
+    public function clearFilters()
+    {
+        $this->filters->clear();
     }
 
     /**
@@ -101,18 +113,23 @@ abstract class BaseAsset implements AssetInterface
         $this->content = $content;
     }
 
-    public function getSourceUrl()
+    public function getSourceRoot()
     {
-        return $this->sourceUrl;
+        return $this->sourceRoot;
     }
 
-    public function getTargetUrl()
+    public function getSourcePath()
     {
-        return $this->targetUrl;
+        return $this->sourcePath;
     }
 
-    public function setTargetUrl($targetUrl)
+    public function getTargetPath()
     {
-        $this->targetUrl = $targetUrl;
+        return $this->targetPath;
+    }
+
+    public function setTargetPath($targetPath)
+    {
+        $this->targetPath = $targetPath;
     }
 }

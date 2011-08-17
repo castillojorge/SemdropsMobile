@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block title %} Semdrops Mobile - Error {% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+	Some kind of error ocurred. <br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" />
+
+{% endblock %}
+

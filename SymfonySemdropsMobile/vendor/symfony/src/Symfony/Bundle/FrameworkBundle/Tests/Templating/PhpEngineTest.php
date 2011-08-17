@@ -35,12 +35,24 @@ class PhpEngineTest extends TestCase
     {
         $container = new Container();
         $loader = $this->getMockForAbstractClass('Symfony\Component\Templating\Loader\Loader');
-        $engine = new PhpEngine(new TemplateNameParser(), $container, $loader, $app = new GlobalVariables($container));
+        $engine = new PhpEngine(new TemplateNameParser(), $container, $loader, new GlobalVariables($container));
 
         $container->set('request', null);
 
         $globals = $engine->getGlobals();
         $this->assertEmpty($globals['app']->getRequest());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetInvalidHelper()
+    {
+        $container = $this->getContainer();
+        $loader = $this->getMockForAbstractClass('Symfony\Component\Templating\Loader\Loader');
+        $engine = new PhpEngine(new TemplateNameParser(), $container, $loader);
+
+        $engine->get('non-existing-helper');
     }
 
     /**

@@ -18,21 +18,19 @@ namespace Symfony\Component\HttpKernel\Log;
  */
 interface LoggerInterface
 {
-    function log($message, $priority);
+    function emerg($message, array $context = array());
 
-    function emerg($message);
+    function alert($message, array $context = array());
 
-    function alert($message);
+    function crit($message, array $context = array());
 
-    function crit($message);
+    function err($message, array $context = array());
 
-    function err($message);
+    function warn($message, array $context = array());
 
-    function warn($message);
+    function notice($message, array $context = array());
 
-    function notice($message);
+    function info($message, array $context = array());
 
-    function info($message);
-
-    function debug($message);
+    function debug($message, array $context = array());
 }

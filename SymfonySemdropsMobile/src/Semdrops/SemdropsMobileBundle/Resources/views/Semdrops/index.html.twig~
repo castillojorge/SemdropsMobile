@@ -1,0 +1,13 @@
+{% extends "::base.html.twig" %}
+
+{% block title %} Semdrops Mobile {% endblock %}
+{% stylesheets '@SemdropsSemdropsMobileBundle/Resources/style/iPhone.css' %}
+    <link  rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+{% endstylesheets %}
+{% block body %}
+	<p>Hello visitor!<br>
+	This is the index of Semdrops Mobile.<br>
+	</p>
+	<p><a href= "{{ path('getCategories') }}" class= "white button">Get Categories</a></p>
+	<p><a href= "{{ path('addCategory') }}" class= "white button">Add Categories</a></p>
+{% endblock %}

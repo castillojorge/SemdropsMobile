@@ -14,7 +14,7 @@
  * Represents a module node.
  *
  * @package    twig
- * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Module extends Twig_Node
 {
@@ -136,6 +136,7 @@ class Twig_Node_Module extends Twig_Node
                 $this->compileLoadTemplate($compiler, $trait->getNode('template'), sprintf('$_trait_%s', $i));
 
                 $compiler
+                    ->addDebugInfo($trait->getNode('template'))
                     ->write(sprintf("if (!\$_trait_%s->isTraitable()) {\n", $i))
                     ->indent()
                     ->write("throw new Twig_Error_Runtime('Template \"'.")

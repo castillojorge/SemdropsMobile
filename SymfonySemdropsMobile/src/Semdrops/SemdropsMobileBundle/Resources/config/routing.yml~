@@ -1,0 +1,19 @@
+homepage:
+    pattern:  /semdrops/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:index }
+
+getcategories:
+    pattern: /semdrops/get_categories/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:getCategories }
+
+showcategories:
+    pattern: /semdrops/show_categories/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:showCategories }
+
+addCategory:
+    pattern: /semdrops/add_category
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addCategory }
+
+persistCategory:
+    pattern: /semdrops/persist_category
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:persistCategory }

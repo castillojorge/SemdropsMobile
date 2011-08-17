@@ -1,0 +1,32 @@
+{% extends "::base.html.twig" %}
+
+{% block title %} Semdrops Mobile - Get Tags {% endblock %}
+{% stylesheets '@SemdropsSemdropsMobileBundle/Resources/style/iPhone.css' %}
+    <link  rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+{% endstylesheets %}
+{% block body %}
+	{% block javascripts %}
+		<script type="text/javascript"> 
+			function clickclear(thisfield, defaulttext) {
+				if (thisfield.value == defaulttext) {
+					thisfield.value = "";
+				}
+			}
+			function clickrecall(thisfield, defaulttext) {
+				if (thisfield.value == "") {
+					thisfield.value = defaulttext;
+				}
+			}
+		</script> 
+	{% endblock %}
+
+	<form class= "form" action="{{ path('showCategories') }}" method="post" {{ form_enctype(form) }}>
+
+		<input type="text" name="uri" value="Here goes your URI" id="some_name" onclick="clickclear(this, 'Here goes your URI')" onblur="clickrecall(this, 'Here goes your URI')" />
+		Here goes the URI: {{ form_widget(form.uri) }} <br>
+	
+		{{ form_rest(form) }} {# recommended #}
+
+		<input type="submit" value="Show Tags"/>
+	</form>
+{% endblock %}

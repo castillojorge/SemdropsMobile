@@ -20,7 +20,7 @@ class UrlValidator extends ConstraintValidator
     const PATTERN = '~^
             (%s)://                                 # protocol
             (
-                ([a-z0-9-]+\.)+[a-z]{2,6}               # a domain name
+                ([\pL\pN\pS-]+\.)+[\pL]+                   # a domain name
                     |                                     #  or
                 \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}      # a IP address
                     |                                     #  or
@@ -30,7 +30,7 @@ class UrlValidator extends ConstraintValidator
             )
             (:[0-9]+)?                              # a port (optional)
             (/?|/\S+)                               # a /, nothing or a / with something
-        $~ix';
+        $~ixu';
 
     public function isValid($value, Constraint $constraint)
     {
@@ -38,7 +38,7 @@ class UrlValidator extends ConstraintValidator
             return true;
         }
 
-        if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString()'))) {
+        if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedTypeException($value, 'string');
         }
 

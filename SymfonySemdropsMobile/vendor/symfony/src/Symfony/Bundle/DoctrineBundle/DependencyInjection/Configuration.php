@@ -74,10 +74,11 @@ class Configuration implements ConfigurationInterface
                             'path',
                             'memory',
                             'unix_socket',
-                            'wrapper_class', 'wrapper-class', 'wrapperClass',
-                            'platform_service', 'platform-service', 'platform-service',
+                            'wrapper_class',
+                            'platform_service',
                             'charset',
-                            'logging'
+                            'logging',
+                            'mapping_types',
                         ) as $key) {
                             if (array_key_exists($key, $v)) {
                                 $connection[$key] = $v[$key];
@@ -115,6 +116,7 @@ class Configuration implements ConfigurationInterface
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('name')
             ->prototype('array')
+                ->fixXmlConfig('mapping_type')
                 ->children()
                     ->scalarNode('dbname')->end()
                     ->scalarNode('host')->defaultValue('localhost')->end()
@@ -128,21 +130,16 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('platform_service')->end()
                     ->scalarNode('charset')->end()
                     ->booleanNode('logging')->defaultValue($this->debug)->end()
-                ->end()
-                ->fixXmlConfig('driver_class', 'driverClass')
-                ->children()
-                    ->scalarNode('driverClass')->end()
-                ->end()
-                ->fixXmlConfig('options', 'driverOptions')
-                ->children()
-                    ->arrayNode('driverOptions')
+                    ->scalarNode('driver_class')->end()
+                    ->scalarNode('wrapper_class')->end()
+                    ->arrayNode('options')
                         ->useAttributeAsKey('key')
                         ->prototype('scalar')->end()
                     ->end()
-                ->end()
-                ->fixXmlConfig('wrapper_class', 'wrapperClass')
-                ->children()
-                    ->scalarNode('wrapperClass')->end()
+                    ->arrayNode('mapping_types')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')->end()
+                    ->end()
                 ->end()
             ->end()
         ;
@@ -207,7 +204,7 @@ class Configuration implements ConfigurationInterface
                 ->append($this->getOrmCacheDriverNode('result_cache_driver'))
                 ->children()
                     ->scalarNode('connection')->end()
-                    ->scalarNode('class_metadata_factory_name')->defaultValue('%doctrine.orm.class_metadata_factory_name%')->end()
+                    ->scalarNode('class_metadata_factory_name')->defaultValue('Doctrine\ORM\Mapping\ClassMetadataFactory')->end()
                     ->scalarNode('auto_mapping')->defaultFalse()->end()
                 ->end()
                 ->fixXmlConfig('hydrator')
@@ -224,11 +221,13 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function($v) { return array ('type' => $v); })
+                                ->then(function($v) { return array('type' => $v); })
                             ->end()
-                            ->treatNullLike(array ())
+                            ->treatNullLike(array())
+                            ->treatFalseLike(array('mapping' => false))
                             ->performNoDeepMerging()
                             ->children()
+                                ->scalarNode('mapping')->defaultValue(true)->end()
                                 ->scalarNode('type')->end()
                                 ->scalarNode('dir')->end()
                                 ->scalarNode('alias')->end()
@@ -272,7 +271,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
                 ->ifString()
-                ->then(function($v) { return array ('type' => $v); })
+                ->then(function($v) { return array('type' => $v); })
             ->end()
             ->children()
                 ->scalarNode('type')->defaultValue('array')->isRequired()->end()

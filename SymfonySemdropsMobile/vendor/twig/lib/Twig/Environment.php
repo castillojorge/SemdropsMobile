@@ -13,11 +13,11 @@
  * Stores the Twig configuration.
  *
  * @package twig
- * @author  Fabien Potencier <fabien.potencier@symfony-project.com>
+ * @author  Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Environment
 {
-    const VERSION = '1.1.0-DEV';
+    const VERSION = '1.1.0-RC3';
 
     protected $charset;
     protected $loader;

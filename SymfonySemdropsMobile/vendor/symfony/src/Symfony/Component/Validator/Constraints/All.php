@@ -11,7 +11,10 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
-class All extends \Symfony\Component\Validator\Constraint
+use Symfony\Component\Validator\Constraint;
+
+/** @Annotation */
+class All extends Constraint
 {
     public $constraints = array();
 
@@ -23,13 +26,5 @@ class All extends \Symfony\Component\Validator\Constraint
     public function getRequiredOptions()
     {
         return array('constraints');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTargets()
-    {
-        return self::PROPERTY_CONSTRAINT;
     }
 }

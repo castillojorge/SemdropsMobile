@@ -3,6 +3,7 @@
 namespace Symfony\Component\Serializer\Encoder;
 
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 /*
  * This file is part of the Symfony framework.
@@ -20,7 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @author John Wards <jwards@whiteoctober.co.uk>
  * @author Fabian Vogler <fabian@equivalence.ch>
  */
-class XmlEncoder extends AbstractEncoder implements DecoderInterface
+class XmlEncoder extends SerializerAwareEncoder implements EncoderInterface, DecoderInterface, NormalizationAwareInterface
 {
     private $dom;
     private $format;
@@ -38,13 +39,14 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
         $this->dom = new \DOMDocument();
         $this->format = $format;
 
-        if ($this->serializer->isStructuredType($data)) {
+        if (null !== $data && !is_scalar($data)) {
             $root = $this->dom->createElement($this->rootNodeName);
             $this->dom->appendChild($root);
             $this->buildXml($root, $data);
         } else {
             $this->appendNode($this->dom, $data, $this->rootNodeName);
         }
+
         return $this->dom->saveXML();
     }
 
@@ -63,8 +65,10 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
                 $data['@'.$attrkey] = (string) $attr;
             }
             $data['#'] = (string) $xml;
+
             return $data;
         }
+
         return $this->parseXml($xml);
     }
 
@@ -97,6 +101,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
             $frag = $this->dom->createDocumentFragment();
             $frag->appendXML($val);
             $node->appendChild($frag);
+
             return true;
         }
 
@@ -138,6 +143,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
     {
         if ($fragment instanceof \DOMDocumentFragment) {
             $node->appendChild($fragment);
+
             return true;
         }
 
@@ -201,6 +207,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
                 $data[$key] = $value;
             }
         }
+
         return $data;
     }
 
@@ -224,14 +231,14 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
                     $append = $this->selectNodeType($parentNode, $data);
                 } elseif (is_array($data) && false === is_numeric($key)) {
                     /**
-                    * Is this array fully numeric keys?
-                    */
+                     * Is this array fully numeric keys?
+                     */
                     if (ctype_digit(implode('', array_keys($data)))) {
                         /**
-                        * Create nodes to append to $parentNode based on the $key of this array
-                        * Produces <xml><item>0</item><item>1</item></xml>
-                        * From array("item" => array(0,1));
-                        */
+                         * Create nodes to append to $parentNode based on the $key of this array
+                         * Produces <xml><item>0</item><item>1</item></xml>
+                         * From array("item" => array(0,1));
+                         */
                         foreach ($data as $subData) {
                             $append = $this->appendNode($parentNode, $subData, $key);
                         }
@@ -244,22 +251,25 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
                     $append = $this->appendNode($parentNode, $data, $key);
                 }
             }
+
             return $append;
         }
         if (is_object($data)) {
-            $data = $this->serializer->normalizeObject($data, $this->format);
-            if (!$this->serializer->isStructuredType($data)) {
-                // top level data object is normalized into a scalar
-                if (!$parentNode->parentNode->parentNode) {
-                    $root = $parentNode->parentNode;
-                    $root->removeChild($parentNode);
-                    return $this->appendNode($root, $data, $this->rootNodeName);
-                }
-                return $this->appendNode($parentNode, $data, 'data');
+            $data = $this->serializer->normalize($data, $this->format);
+            if (null !== $data && !is_scalar($data)) {
+                return $this->buildXml($parentNode, $data);
             }
-            return $this->buildXml($parentNode, $data);
+            // top level data object was normalized into a scalar
+            if (!$parentNode->parentNode->parentNode) {
+                $root = $parentNode->parentNode;
+                $root->removeChild($parentNode);
+
+                return $this->appendNode($root, $data, $this->rootNodeName);
+            }
+
+            return $this->appendNode($parentNode, $data, 'data');
         }
-        throw new \UnexpectedValueException('An unexpected value could not be serialized: '.var_export($data, true));
+        throw new UnexpectedValueException('An unexpected value could not be serialized: '.var_export($data, true));
     }
 
     /**
@@ -269,7 +279,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
      * @param array|object $data
      * @param string       $nodename
      * @param string       $key
-     * @return void
+     * @return Boolean
      */
     private function appendNode($parentNode, $data, $nodeName, $key = null)
     {
@@ -282,6 +292,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
         if ($appendNode) {
             $parentNode->appendChild($node);
         }
+
         return $appendNode;
     }
 
@@ -302,7 +313,7 @@ class XmlEncoder extends AbstractEncoder implements DecoderInterface
         } elseif ($val instanceof \Traversable) {
             $this->buildXml($node, $val);
         } elseif (is_object($val)) {
-            return $this->buildXml($node, $this->serializer->normalizeObject($val, $this->format));
+            return $this->buildXml($node, $this->serializer->normalize($val, $this->format));
         } elseif (is_numeric($val)) {
             return $this->appendText($node, (string) $val);
         } elseif (is_string($val)) {

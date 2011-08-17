@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\Output;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class AssetsInstallCommand extends Command
+class AssetsInstallCommand extends ContainerAwareCommand
 {
     /**
      * @see Command
@@ -63,12 +63,16 @@ EOT
             throw new \InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $input->getArgument('target')));
         }
 
-        $filesystem = $this->container->get('filesystem');
+        if (!function_exists('symlink') && $input->getOption('symlink')) {
+            throw new \InvalidArgumentException('The symlink() function is not available on your system. You need to install the assets without the --symlink option.');
+        }
+
+        $filesystem = $this->getContainer()->get('filesystem');
 
         // Create the bundles directory otherwise symlink will fail.
         $filesystem->mkdir($input->getArgument('target').'/bundles/', 0777);
 
-        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
+        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
             if (is_dir($originDir = $bundle->getPath().'/Resources/public')) {
                 $targetDir = $input->getArgument('target').'/bundles/'.preg_replace('/bundle$/', '', strtolower($bundle->getName()));
 
