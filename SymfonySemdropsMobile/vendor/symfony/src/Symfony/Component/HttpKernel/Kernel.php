@@ -28,10 +28,13 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 use Symfony\Component\HttpKernel\DependencyInjection\AddClassesToCachePass;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension as DIExtension;
+use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\ClassLoader\ClassCollectionLoader;
+use Symfony\Component\ClassLoader\DebugUniversalClassLoader;
 
 /**
  * The Kernel is the heart of the Symfony system.
@@ -53,7 +56,7 @@ abstract class Kernel implements KernelInterface
     protected $startTime;
     protected $classes;
 
-    const VERSION = '2.0.0-DEV';
+    const VERSION = '2.0.0-RC4';
 
     /**
      * Constructor.
@@ -71,10 +74,23 @@ abstract class Kernel implements KernelInterface
         $this->classes = array();
 
         if ($this->debug) {
+            $this->startTime = microtime(true);
+        }
+
+        $this->init();
+    }
+
+    public function init()
+    {
+        if ($this->debug) {
             ini_set('display_errors', 1);
             error_reporting(-1);
 
-            $this->startTime = microtime(true);
+            DebugUniversalClassLoader::enable();
+            ErrorHandler::register();
+            if ('cli' !== php_sapi_name()) {
+                ExceptionHandler::register();
+            }
         } else {
             ini_set('display_errors', 0);
         }
@@ -120,6 +136,10 @@ abstract class Kernel implements KernelInterface
      */
     public function shutdown()
     {
+        if (false === $this->booted) {
+            return;
+        }
+
         $this->booted = false;
 
         foreach ($this->getBundles() as $bundle) {
@@ -242,8 +262,11 @@ abstract class Kernel implements KernelInterface
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
         }
 
-        $name = substr($name, 1);
-        list($bundleName, $path) = explode('/', $name, 2);
+        $bundleName = substr($name, 1);
+        $path = '';
+        if (false !== strpos($bundleName, '/')) {
+            list($bundleName, $path) = explode('/', $bundleName, 2);
+        }
 
         $isResource = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath = substr($path, 9);
@@ -280,7 +303,7 @@ abstract class Kernel implements KernelInterface
             return $first && $isResource ? $files[0] : $files;
         }
 
-        throw new \InvalidArgumentException(sprintf('Unable to find file "@%s".', $name));
+        throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $name));
     }
 
     /**
@@ -498,7 +521,7 @@ abstract class Kernel implements KernelInterface
         $this->container = new $class();
         $this->container->set('kernel', $this);
 
-        if (!$fresh && 'cli' !== php_sapi_name()) {
+        if (!$fresh) {
             $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir'));
         }
     }
@@ -557,6 +580,16 @@ abstract class Kernel implements KernelInterface
      */
     protected function buildContainer()
     {
+        foreach (array('cache' => $this->getCacheDir(), 'logs' => $this->getLogDir()) as $name => $dir) {
+            if (!is_dir($dir)) {
+                if (false === @mkdir($dir, 0777, true)) {
+                    throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, dirname($dir)));
+                }
+            } elseif (!is_writable($dir)) {
+                throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
+            }
+        }
+
         $container = new ContainerBuilder(new ParameterBag($this->getKernelParameters()));
         $extensions = array();
         foreach ($this->bundles as $bundle) {
@@ -578,17 +611,6 @@ abstract class Kernel implements KernelInterface
 
         if (null !== $cont = $this->registerContainerConfiguration($this->getContainerLoader($container))) {
             $container->merge($cont);
-        }
-
-        foreach (array('cache', 'logs') as $name) {
-            $dir = $container->getParameter(sprintf('kernel.%s_dir', $name));
-            if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true)) {
-                    exit(sprintf("Unable to create the %s directory (%s)\n", $name, dirname($dir)));
-                }
-            } elseif (!is_writable($dir)) {
-                exit(sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
-            }
         }
 
         $container->addCompilerPass(new AddClassesToCachePass($this));

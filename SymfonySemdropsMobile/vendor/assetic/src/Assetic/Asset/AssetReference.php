@@ -44,6 +44,12 @@ class AssetReference implements AssetInterface
         return $this->callAsset(__FUNCTION__);
     }
 
+    public function clearFilters()
+    {
+        $this->filters = array();
+        $this->callAsset(__FUNCTION__);
+    }
+
     public function load(FilterInterface $additionalFilter = null)
     {
         $this->flushFilters();
@@ -68,19 +74,24 @@ class AssetReference implements AssetInterface
         $this->callAsset(__FUNCTION__, array($content));
     }
 
-    public function getSourceUrl()
+    public function getSourceRoot()
     {
         return $this->callAsset(__FUNCTION__);
     }
 
-    public function getTargetUrl()
+    public function getSourcePath()
     {
         return $this->callAsset(__FUNCTION__);
     }
 
-    public function setTargetUrl($targetUrl)
+    public function getTargetPath()
     {
-        $this->callAsset(__FUNCTION__, array($targetUrl));
+        return $this->callAsset(__FUNCTION__);
+    }
+
+    public function setTargetPath($targetPath)
+    {
+        $this->callAsset(__FUNCTION__, array($targetPath));
     }
 
     public function getLastModified()

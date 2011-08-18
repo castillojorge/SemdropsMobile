@@ -23,7 +23,7 @@ class TypeValidator extends ConstraintValidator
         }
 
         $type = $constraint->type == 'boolean' ? 'bool' : $constraint->type;
-        $function = 'is_' . $type;
+        $function = 'is_'.$type;
 
         if (function_exists($function) && call_user_func($function, $value)) {
             return true;
@@ -32,7 +32,7 @@ class TypeValidator extends ConstraintValidator
         }
 
         $this->setMessage($constraint->message, array(
-            '{{ value }}' => $value,
+            '{{ value }}' => is_object($value) ? get_class($value) : (string)$value,
             '{{ type }}'  => $constraint->type,
         ));
 

@@ -18,8 +18,6 @@ use Monolog\Formatter\LineFormatter;
 /**
  * Base Handler class providing the Handler structure
  *
- * Classes extending it should (in most cases) only implement write($record)
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
 abstract class AbstractHandler implements HandlerInterface
@@ -27,6 +25,9 @@ abstract class AbstractHandler implements HandlerInterface
     protected $level = Logger::DEBUG;
     protected $bubble = false;
 
+    /**
+     * @var FormatterInterface
+     */
     protected $formatter;
     protected $processors = array();
 
@@ -34,7 +35,7 @@ abstract class AbstractHandler implements HandlerInterface
      * @param integer $level The minimum logging level at which this handler will be triggered
      * @param Boolean $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($level = Logger::DEBUG, $bubble = false)
+    public function __construct($level = Logger::DEBUG, $bubble = true)
     {
         $this->level = $level;
         $this->bubble = $bubble;
@@ -46,31 +47,6 @@ abstract class AbstractHandler implements HandlerInterface
     public function isHandling(array $record)
     {
         return $record['level'] >= $this->level;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(array $record)
-    {
-        if ($record['level'] < $this->level) {
-            return false;
-        }
-
-        if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = call_user_func($processor, $record);
-            }
-        }
-
-        if (!$this->formatter) {
-            $this->formatter = $this->getDefaultFormatter();
-        }
-        $record = $this->formatter->format($record);
-
-        $this->write($record);
-
-        return false === $this->bubble;
     }
 
     /**
@@ -105,6 +81,9 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function popProcessor()
     {
+        if (!$this->processors) {
+            throw new \LogicException('You tried to pop from an empty processor stack.');
+        }
         return array_shift($this->processors);
     }
 
@@ -121,6 +100,10 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function getFormatter()
     {
+        if (!$this->formatter) {
+            $this->formatter = $this->getDefaultFormatter();
+        }
+
         return $this->formatter;
     }
 
@@ -170,14 +153,6 @@ abstract class AbstractHandler implements HandlerInterface
     {
         $this->close();
     }
-
-    /**
-     * Writes the record down to the log of the implementing handler
-     *
-     * @param array $record
-     * @return void
-     */
-    abstract protected function write(array $record);
 
     /**
      * Gets the default formatter.

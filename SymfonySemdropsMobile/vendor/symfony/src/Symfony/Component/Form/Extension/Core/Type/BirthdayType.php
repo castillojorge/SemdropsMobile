@@ -12,10 +12,12 @@
 namespace Symfony\Component\Form\Extension\Core\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
 
 class BirthdayType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultOptions(array $options)
     {
         return array(
@@ -23,11 +25,17 @@ class BirthdayType extends AbstractType
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent(array $options)
     {
         return 'date';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'birthday';

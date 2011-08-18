@@ -20,14 +20,24 @@ use Monolog\Logger;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class TestHandler extends AbstractHandler
+class TestHandler extends AbstractProcessingHandler
 {
-    protected $records;
-    protected $recordsByLevel;
+    protected $records = array();
+    protected $recordsByLevel = array();
 
     public function getRecords()
     {
         return $this->records;
+    }
+
+    public function hasAlert($record)
+    {
+        return $this->hasRecord($record, Logger::ALERT);
+    }
+
+    public function hasCritical($record)
+    {
+        return $this->hasRecord($record, Logger::CRITICAL);
     }
 
     public function hasError($record)
@@ -50,6 +60,16 @@ class TestHandler extends AbstractHandler
         return $this->hasRecord($record, Logger::DEBUG);
     }
 
+    public function hasAlertRecords()
+    {
+        return isset($this->recordsByLevel[Logger::ALERT]);
+    }
+
+    public function hasCriticalRecords()
+    {
+        return isset($this->recordsByLevel[Logger::CRITICAL]);
+    }
+
     public function hasErrorRecords()
     {
         return isset($this->recordsByLevel[Logger::ERROR]);
@@ -70,15 +90,18 @@ class TestHandler extends AbstractHandler
         return isset($this->recordsByLevel[Logger::DEBUG]);
     }
 
-    protected function hasRecord($record, $level = null)
+    protected function hasRecord($record, $level)
     {
-        if (null === $level) {
-            $records = $this->records;
-        } else {
-            $records = $this->recordsByLevel[$level];
+        if (!isset($this->recordsByLevel[$level])) {
+            return false;
         }
-        foreach ($records as $msg) {
-            if ($msg['message'] === $record) {
+
+        if (is_array($record)) {
+            $record = $record['message'];
+        }
+
+        foreach ($this->recordsByLevel[$level] as $rec) {
+            if ($rec['message'] === $record) {
                 return true;
             }
         }

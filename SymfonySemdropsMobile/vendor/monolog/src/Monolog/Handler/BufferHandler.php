@@ -33,12 +33,11 @@ class BufferHandler extends AbstractHandler
      * @param integer $level The minimum logging level at which this handler will be triggered
      * @param Boolean $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(HandlerInterface $handler, $bufferSize = 0, $level = Logger::DEBUG, $bubble = false)
+    public function __construct(HandlerInterface $handler, $bufferSize = 0, $level = Logger::DEBUG, $bubble = true)
     {
         parent::__construct($level, $bubble);
         $this->handler = $handler;
         $this->bufferSize = $bufferSize;
-        $this->bubble = $bubble;
     }
 
     /**
@@ -64,13 +63,5 @@ class BufferHandler extends AbstractHandler
     public function close()
     {
         $this->handler->handleBatch($this->buffer);
-    }
-
-    /**
-     * Implemented to comply with the AbstractHandler requirements. Can not be called.
-     */
-    protected function write(array $record)
-    {
-        throw new \BadMethodCallException('This method should not be called directly on the BufferHandler.');
     }
 }

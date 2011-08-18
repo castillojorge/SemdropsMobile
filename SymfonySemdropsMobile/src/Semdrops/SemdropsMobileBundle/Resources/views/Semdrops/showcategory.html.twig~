@@ -1,0 +1,12 @@
+{% block title %} Semdrops Mobile - Results {% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block body %}
+	Categories of the wiki <b>{{ link }}</b>:
+	
+	{% include 'SemdropsSemdropsMobileBundle:Semdrops:showcategory_recursive.html.twig' with {'tree': categories} %}
+	
+	<input type= "button" onclick= "location.href='{{ path('addCategory') }}'" value="Add a Category" name="addCategoryButton" /><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" />
+
+{% endblock %}
+

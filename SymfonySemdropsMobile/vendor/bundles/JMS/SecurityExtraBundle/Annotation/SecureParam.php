@@ -21,12 +21,13 @@ namespace JMS\SecurityExtraBundle\Annotation;
 /**
  * Represents a @SecureParam annotation.
  *
+ * @Annotation
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class SecureParam implements AnnotationInterface
+final class SecureParam
 {
-    private $name;
-    private $permissions;
+    public $name;
+    public $permissions;
 
     public function __construct(array $values)
     {
@@ -40,15 +41,5 @@ class SecureParam implements AnnotationInterface
         $this->name = $values['name'];
 
         $this->permissions = array_map('trim', explode(',', $values['permissions']));
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getPermissions()
-    {
-        return $this->permissions;
     }
 }

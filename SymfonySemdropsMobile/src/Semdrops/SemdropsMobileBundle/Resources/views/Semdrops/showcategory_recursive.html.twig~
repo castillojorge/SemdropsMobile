@@ -1,0 +1,8 @@
+<ul>
+	{% for category in tree %}	
+		<li>{{ category.getName() }}</li>
+		{% include 'SemdropsSemdropsMobileBundle:Semdrops:asdf.html.twig' with {'tree': category.getFathers()} %}
+	{% else %}
+		<li>No more categories to show.</li>	
+	{% endfor %}
+</ul>

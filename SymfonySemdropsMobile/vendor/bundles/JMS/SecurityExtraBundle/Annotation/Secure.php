@@ -21,11 +21,12 @@ namespace JMS\SecurityExtraBundle\Annotation;
 /**
  * Represents a @Secure annotation.
  *
+ * @Annotation
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class Secure implements AnnotationInterface
+final class Secure
 {
-    private $roles;
+    public $roles;
 
     public function __construct(array $values)
     {
@@ -37,10 +38,5 @@ class Secure implements AnnotationInterface
         }
 
         $this->roles = array_map('trim', explode(',', $values['roles']));
-    }
-
-    public function getRoles()
-    {
-        return $this->roles;
     }
 }

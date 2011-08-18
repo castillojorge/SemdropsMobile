@@ -89,7 +89,7 @@ class HttpKernel implements HttpKernelInterface
     {
         // request
         $event = new GetResponseEvent($this, $request, $type);
-        $this->dispatcher->dispatch(Events::onCoreRequest, $event);
+        $this->dispatcher->dispatch(KernelEvents::REQUEST, $event);
 
         if ($event->hasResponse()) {
             return $this->filterResponse($event->getResponse(), $request, $type);
@@ -101,7 +101,7 @@ class HttpKernel implements HttpKernelInterface
         }
 
         $event = new FilterControllerEvent($this, $controller, $request, $type);
-        $this->dispatcher->dispatch(Events::onCoreController, $event);
+        $this->dispatcher->dispatch(KernelEvents::CONTROLLER, $event);
         $controller = $event->getController();
 
         // controller arguments
@@ -113,7 +113,7 @@ class HttpKernel implements HttpKernelInterface
         // view
         if (!$response instanceof Response) {
             $event = new GetResponseForControllerResultEvent($this, $request, $type, $response);
-            $this->dispatcher->dispatch(Events::onCoreView, $event);
+            $this->dispatcher->dispatch(KernelEvents::VIEW, $event);
 
             if ($event->hasResponse()) {
                 $response = $event->getResponse();
@@ -137,8 +137,8 @@ class HttpKernel implements HttpKernelInterface
      * Filters a response object.
      *
      * @param Response $response A Response instance
-     * @param string   $message A error message in case the response is not a Response object
-     * @param integer  $type The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
+     * @param Request  $request  A error message in case the response is not a Response object
+     * @param integer  $type     The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
      *
      * @return Response The filtered Response instance
      *
@@ -148,7 +148,7 @@ class HttpKernel implements HttpKernelInterface
     {
         $event = new FilterResponseEvent($this, $request, $type, $response);
 
-        $this->dispatcher->dispatch(Events::onCoreResponse, $event);
+        $this->dispatcher->dispatch(KernelEvents::RESPONSE, $event);
 
         return $event->getResponse();
     }
@@ -165,7 +165,7 @@ class HttpKernel implements HttpKernelInterface
     private function handleException(\Exception $e, $request, $type)
     {
         $event = new GetResponseForExceptionEvent($this, $request, $type, $e);
-        $this->dispatcher->dispatch(Events::onCoreException, $event);
+        $this->dispatcher->dispatch(KernelEvents::EXCEPTION, $event);
 
         if (!$event->hasResponse()) {
             throw $e;
@@ -181,7 +181,7 @@ class HttpKernel implements HttpKernelInterface
     private function varToString($var)
     {
         if (is_object($var)) {
-            return sprintf('[object](%s)', get_class($var));
+            return sprintf('Object(%s)', get_class($var));
         }
 
         if (is_array($var)) {
@@ -190,17 +190,25 @@ class HttpKernel implements HttpKernelInterface
                 $a[] = sprintf('%s => %s', $k, $this->varToString($v));
             }
 
-            return sprintf("[array](%s)", implode(', ', $a));
+            return sprintf("Array(%s)", implode(', ', $a));
         }
 
         if (is_resource($var)) {
-            return '[resource]';
+            return sprintf('Resource(%s)', get_resource_type($var));
         }
 
         if (null === $var) {
             return 'null';
         }
 
-        return str_replace("\n", '', var_export((string) $var, true));
+        if (false === $var) {
+            return 'false';
+        }
+
+        if (true === $var) {
+            return 'true';
+        }
+
+        return (string) $var;
     }
 }

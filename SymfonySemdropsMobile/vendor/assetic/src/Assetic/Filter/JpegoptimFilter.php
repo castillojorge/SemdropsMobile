@@ -12,6 +12,7 @@
 namespace Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
+use Assetic\Util\ProcessBuilder;
 
 /**
  * Runs assets through Jpegoptim.
@@ -23,6 +24,7 @@ class JpegoptimFilter implements FilterInterface
 {
     private $jpegoptimBin;
     private $stripAll;
+    private $max;
 
     /**
      * Constructor.
@@ -39,22 +41,32 @@ class JpegoptimFilter implements FilterInterface
         $this->stripAll = $stripAll;
     }
 
+    public function setMax($max)
+    {
+        $this->max = $max;
+    }
+
     public function filterLoad(AssetInterface $asset)
     {
     }
 
     public function filterDump(AssetInterface $asset)
     {
-        $options = array($this->jpegoptimBin);
+        $pb = new ProcessBuilder();
+        $pb->add($this->jpegoptimBin);
 
         if ($this->stripAll) {
-            $options[] = '--strip-all';
+            $pb->add('--strip-all');
         }
 
-        $options[] = $input = tempnam(sys_get_temp_dir(), 'assetic_jpegoptim');
+        if ($this->max) {
+            $pb->add('--max='.$this->max);
+        }
+
+        $pb->add($input = tempnam(sys_get_temp_dir(), 'assetic_jpegoptim'));
         file_put_contents($input, $asset->getContent());
 
-        $proc = new Process(implode(' ', array_map('escapeshellarg', $options)));
+        $proc = $pb->getProcess();
         $proc->run();
 
         if (false !== strpos($proc->getOutput(), 'ERROR')) {

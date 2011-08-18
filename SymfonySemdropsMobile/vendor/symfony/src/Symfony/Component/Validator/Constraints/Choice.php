@@ -11,7 +11,10 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
-class Choice extends \Symfony\Component\Validator\Constraint
+use Symfony\Component\Validator\Constraint;
+
+/** @Annotation */
+class Choice extends Constraint
 {
     public $choices;
     public $callback;
@@ -29,13 +32,5 @@ class Choice extends \Symfony\Component\Validator\Constraint
     public function getDefaultOption()
     {
         return 'choices';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTargets()
-    {
-        return self::PROPERTY_CONSTRAINT;
     }
 }

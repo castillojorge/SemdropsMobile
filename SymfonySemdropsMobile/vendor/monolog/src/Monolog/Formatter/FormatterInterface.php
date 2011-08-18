@@ -22,7 +22,15 @@ interface FormatterInterface
      * Formats a log record.
      *
      * @param array $record A record to format
-     * @return array The record with a formatted message
+     * @return mixed The formatted record
      */
     function format(array $record);
+
+    /**
+     * Formats a set of log records.
+     *
+     * @param array $records A set of records to format
+     * @return mixed The formatted set of records
+     */
+    function formatBatch(array $records);
 }

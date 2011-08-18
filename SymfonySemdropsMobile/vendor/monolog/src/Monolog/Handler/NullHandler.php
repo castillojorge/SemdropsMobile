@@ -32,13 +32,6 @@ class NullHandler extends AbstractHandler
             return false;
         }
 
-        return false === $this->bubble;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function write(array $record)
-    {
+        return true;
     }
 }

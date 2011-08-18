@@ -200,6 +200,10 @@ abstract class Client
      */
     public function click(Link $link)
     {
+        if ($link instanceof Form) {
+            return $this->submit($link);
+        }
+
         return $this->request($link->getMethod(), $link->getUri());
     }
 
@@ -285,7 +289,7 @@ abstract class Client
         $process = new PhpProcess($this->getScript($request));
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (!$process->isSuccessful() || !preg_match('/^O\:\d+\:/', $process->getOutput())) {
             throw new \RuntimeException($process->getErrorOutput());
         }
 

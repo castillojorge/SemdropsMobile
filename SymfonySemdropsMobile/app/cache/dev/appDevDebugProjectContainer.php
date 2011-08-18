@@ -33,83 +33,16 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'acme.demo.listener' service.
+     * Gets the 'annotation_reader' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Acme\DemoBundle\ControllerListener A Acme\DemoBundle\ControllerListener instance.
+     * @return Doctrine\Common\Annotations\FileCacheReader A Doctrine\Common\Annotations\FileCacheReader instance.
      */
-    protected function getAcme_Demo_ListenerService()
+    protected function getAnnotationReaderService()
     {
-        return $this->services['acme.demo.listener'] = new \Acme\DemoBundle\ControllerListener($this->get('twig.extension.acme.demo'));
-    }
-
-    /**
-     * Gets the 'annotations.cache.array' service.
-     *
-     * @return Doctrine\Common\Cache\ArrayCache A Doctrine\Common\Cache\ArrayCache instance.
-     */
-    protected function getAnnotations_Cache_ArrayService()
-    {
-        return new \Doctrine\Common\Cache\ArrayCache();
-    }
-
-    /**
-     * Gets the 'annotations.configuration_reader' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader A Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader instance.
-     */
-    protected function getAnnotations_ConfigurationReaderService()
-    {
-        return $this->services['annotations.configuration_reader'] = new \Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader(new \Doctrine\Common\Cache\ArrayCache(), $this->get('annotations.parser'));
-    }
-
-    /**
-     * Gets the 'annotations.controller_parser' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser A Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser instance.
-     */
-    protected function getAnnotations_ControllerParserService()
-    {
-        return $this->services['annotations.controller_parser'] = new \Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser($this->get('annotations.configuration_reader'));
-    }
-
-    /**
-     * Gets the 'annotations.parser' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Doctrine\Common\Annotations\Parser A Doctrine\Common\Annotations\Parser instance.
-     */
-    protected function getAnnotations_ParserService()
-    {
-        $this->services['annotations.parser'] = $instance = new \Doctrine\Common\Annotations\Parser();
-
-        $instance->setAutoloadAnnotations(true);
-        $instance->setAnnotationNamespaceAlias('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\', 'extra');
-
-        return $instance;
-    }
-
-    /**
-     * Gets the 'annotations.reader' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Doctrine\Common\Annotations\AnnotationReader A Doctrine\Common\Annotations\AnnotationReader instance.
-     */
-    protected function getAnnotations_ReaderService()
-    {
-        return $this->services['annotations.reader'] = new \Doctrine\Common\Annotations\AnnotationReader(new \Doctrine\Common\Cache\ArrayCache(), $this->get('annotations.parser'));
+        return $this->services['annotation_reader'] = new \Doctrine\Common\Annotations\FileCacheReader(new \Doctrine\Common\Annotations\AnnotationReader(), '/var/www/symfony_yukakami/app/cache/dev/annotations', true);
     }
 
     /**
@@ -124,22 +57,22 @@ class appDevDebugProjectContainer extends Container
     {
         $a = $this->get('templating.loader');
 
-        $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig')), new \Assetic\Cache\ConfigCache('/var/www/SymfonySemdropsMobile/app/cache/dev/assetic/config'), true)));
+        $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig')), new \Assetic\Cache\ConfigCache('/var/www/symfony_yukakami/app/cache/dev/assetic/config'), true)));
 
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/SymfonySemdropsMobile/app/Resources/FrameworkBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/SymfonySemdropsMobile/app/Resources/SecurityBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/SymfonySemdropsMobile/app/Resources/TwigBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/SymfonySemdropsMobile/app/Resources/MonologBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/MonologBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/SymfonySemdropsMobile/app/Resources/SwiftmailerBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/SymfonySemdropsMobile/app/Resources/DoctrineBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/SymfonySemdropsMobile/app/Resources/AsseticBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/AsseticBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/SymfonySemdropsMobile/app/Resources/SensioFrameworkExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/SymfonySemdropsMobile/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/SymfonySemdropsMobile/app/Resources/JMSSecurityExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/SymfonySemdropsMobile/vendor/bundles/JMS/SecurityExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/SymfonySemdropsMobile/app/Resources/AcmeDemoBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/SymfonySemdropsMobile/src/Acme/DemoBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SemdropsSemdropsMobileBundle', '/var/www/SymfonySemdropsMobile/app/Resources/SemdropsSemdropsMobileBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SemdropsSemdropsMobileBundle', '/var/www/SymfonySemdropsMobile/src/Semdrops/SemdropsMobileBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/SymfonySemdropsMobile/app/Resources/WebProfilerBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SymfonyWebConfiguratorBundle', '/var/www/SymfonySemdropsMobile/app/Resources/SymfonyWebConfiguratorBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SymfonyWebConfiguratorBundle', '/var/www/SymfonySemdropsMobile/vendor/bundles/Symfony/Bundle/WebConfiguratorBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
-        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, '', '/var/www/SymfonySemdropsMobile/app/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/symfony_yukakami/app/Resources/FrameworkBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/symfony_yukakami/app/Resources/SecurityBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/symfony_yukakami/app/Resources/TwigBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/symfony_yukakami/app/Resources/MonologBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/MonologBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/symfony_yukakami/app/Resources/SwiftmailerBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/symfony_yukakami/app/Resources/DoctrineBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/symfony_yukakami/app/Resources/AsseticBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/symfony_yukakami/vendor/bundles/Symfony/Bundle/AsseticBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/symfony_yukakami/app/Resources/SensioFrameworkExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/symfony_yukakami/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/symfony_yukakami/app/Resources/JMSSecurityExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/symfony_yukakami/vendor/bundles/JMS/SecurityExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SemdropsSemdropsMobileBundle', '/var/www/symfony_yukakami/app/Resources/SemdropsSemdropsMobileBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SemdropsSemdropsMobileBundle', '/var/www/symfony_yukakami/src/Semdrops/SemdropsMobileBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/symfony_yukakami/app/Resources/WebProfilerBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/symfony_yukakami/app/Resources/SensioDistributionBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/symfony_yukakami/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/symfony_yukakami/app/Resources/SensioGeneratorBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/symfony_yukakami/vendor/bundles/Sensio/Bundle/GeneratorBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, '', '/var/www/symfony_yukakami/app/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'), 'twig');
 
         return $instance;
     }
@@ -186,24 +119,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\AsseticBundle\Listener\RequestListener A Symfony\Bundle\AsseticBundle\Listener\RequestListener instance.
+     * @return Symfony\Bundle\AsseticBundle\EventListener\RequestListener A Symfony\Bundle\AsseticBundle\EventListener\RequestListener instance.
      */
     protected function getAssetic_RequestListenerService()
     {
-        return $this->services['assetic.request_listener'] = new \Symfony\Bundle\AsseticBundle\Listener\RequestListener();
-    }
-
-    /**
-     * Gets the 'cache.annotation' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Cache\AnnotationCacheListener A Sensio\Bundle\FrameworkExtraBundle\Cache\AnnotationCacheListener instance.
-     */
-    protected function getCache_AnnotationService()
-    {
-        return $this->services['cache.annotation'] = new \Sensio\Bundle\FrameworkExtraBundle\Cache\AnnotationCacheListener();
+        return $this->services['assetic.request_listener'] = new \Symfony\Bundle\AsseticBundle\EventListener\RequestListener();
     }
 
     /**
@@ -216,64 +136,38 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCacheWarmerService()
     {
-        return $this->services['cache_warmer'] = new \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate(array(0 => new \Symfony\Bundle\AsseticBundle\CacheWarmer\AssetManagerCacheWarmer($this), 1 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer($this->get('router.real')), 2 => new \Symfony\Bundle\DoctrineBundle\CacheWarmer\ProxyCacheWarmer($this)));
+        $a = $this->get('kernel');
+        $b = $this->get('templating.name_parser');
+
+        $c = new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder($a, $b, '/var/www/symfony_yukakami/app/Resources');
+
+        return $this->services['cache_warmer'] = new \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate(array(0 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplatePathsCacheWarmer($c, $this->get('templating.locator')), 1 => new \Symfony\Bundle\AsseticBundle\CacheWarmer\AssetManagerCacheWarmer($this), 2 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer($this->get('router')), 3 => new \Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheCacheWarmer($this, $c), 4 => new \Symfony\Bridge\Doctrine\CacheWarmer\ProxyCacheWarmer($this->get('doctrine'))));
     }
 
     /**
-     * Gets the 'converter.doctrine.mongodb.odm' service.
+     * Gets the 'data_collector.request' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter A Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter instance.
+     * @return Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector A Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector instance.
      */
-    protected function getConverter_Doctrine_Mongodb_OdmService()
+    protected function getDataCollector_RequestService()
     {
-        return $this->services['converter.doctrine.mongodb.odm'] = new \Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter(NULL);
+        return $this->services['data_collector.request'] = new \Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector();
     }
 
     /**
-     * Gets the 'converter.doctrine.orm' service.
+     * Gets the 'doctrine' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter A Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter instance.
+     * @return Symfony\Bundle\DoctrineBundle\Registry A Symfony\Bundle\DoctrineBundle\Registry instance.
      */
-    protected function getConverter_Doctrine_OrmService()
+    protected function getDoctrineService()
     {
-        return $this->services['converter.doctrine.orm'] = new \Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter($this->get('doctrine.orm.default_entity_manager'));
-    }
-
-    /**
-     * Gets the 'converter.listener' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener A Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener instance.
-     */
-    protected function getConverter_ListenerService()
-    {
-        return $this->services['converter.listener'] = new \Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener($this->get('converter.manager'));
-    }
-
-    /**
-     * Gets the 'converter.manager' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager A Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager instance.
-     */
-    protected function getConverter_ManagerService()
-    {
-        $this->services['converter.manager'] = $instance = new \Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager(array());
-
-        $instance->add($this->get('converter.doctrine.orm'), 0);
-        $instance->add($this->get('converter.doctrine.mongodb.odm'), 0);
-
-        return $instance;
+        return $this->services['doctrine'] = new \Symfony\Bundle\DoctrineBundle\Registry($this, array('default' => 'doctrine.dbal.default_connection'), array('default' => 'doctrine.orm.default_entity_manager'), 'default', 'default');
     }
 
     /**
@@ -299,77 +193,13 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getDoctrine_Dbal_DefaultConnectionService()
     {
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'symfony', 'host' => 'localhost', 'user' => 'root', 'password' => '', 'driver' => 'pdo_mysql', 'port' => NULL, 'driverOptions' => array()), $this->get('doctrine.dbal.default_connection.configuration'), $this->get('doctrine.dbal.default_connection.event_manager'));
-    }
+        $a = new \Doctrine\DBAL\Configuration();
+        $a->setSQLLogger($this->get('doctrine.dbal.logger'));
 
-    /**
-     * Gets the 'doctrine.dbal.default_connection.configuration' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Doctrine\DBAL\Configuration A Doctrine\DBAL\Configuration instance.
-     */
-    protected function getDoctrine_Dbal_DefaultConnection_ConfigurationService()
-    {
-        $this->services['doctrine.dbal.default_connection.configuration'] = $instance = new \Doctrine\DBAL\Configuration();
+        $b = new \Doctrine\Common\EventManager();
+        $b->addEventSubscriber(new \Doctrine\DBAL\Event\Listeners\MysqlSessionInit('UTF8'));
 
-        $instance->setSQLLogger($this->get('doctrine.dbal.logger'));
-
-        return $instance;
-    }
-
-    /**
-     * Gets the 'doctrine.dbal.default_connection.event_manager' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Doctrine\Common\EventManager A Doctrine\Common\EventManager instance.
-     */
-    protected function getDoctrine_Dbal_DefaultConnection_EventManagerService()
-    {
-        return $this->services['doctrine.dbal.default_connection.event_manager'] = new \Doctrine\Common\EventManager();
-    }
-
-    /**
-     * Gets the 'doctrine.orm.default_configuration' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Doctrine\ORM\Configuration A Doctrine\ORM\Configuration instance.
-     */
-    protected function getDoctrine_Orm_DefaultConfigurationService()
-    {
-        $a = new \Doctrine\Common\Cache\ArrayCache();
-        $a->setNamespace('sf2orm_default_3c2a6c87d6d942ddd7d7307939d9aefb');
-
-        $b = new \Doctrine\Common\Cache\ArrayCache();
-        $b->setNamespace('sf2orm_default_3c2a6c87d6d942ddd7d7307939d9aefb');
-
-        $c = new \Doctrine\Common\Cache\ArrayCache();
-        $c->setNamespace('sf2orm_default_3c2a6c87d6d942ddd7d7307939d9aefb');
-
-        $d = new \Doctrine\Common\Annotations\AnnotationReader();
-        $d->setAnnotationNamespaceAlias('Doctrine\\ORM\\Mapping\\', 'orm');
-
-        $e = new \Doctrine\ORM\Mapping\Driver\DriverChain();
-        $e->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($d, array(0 => '/var/www/SymfonySemdropsMobile/src/Semdrops/SemdropsMobileBundle/Entity')), 'Semdrops\\SemdropsMobileBundle\\Entity');
-
-        $this->services['doctrine.orm.default_configuration'] = $instance = new \Doctrine\ORM\Configuration();
-
-        $instance->setEntityNamespaces(array('SemdropsSemdropsMobileBundle' => 'Semdrops\\SemdropsMobileBundle\\Entity'));
-        $instance->setMetadataCacheImpl($a);
-        $instance->setQueryCacheImpl($b);
-        $instance->setResultCacheImpl($c);
-        $instance->setMetadataDriverImpl($e);
-        $instance->setProxyDir('/var/www/SymfonySemdropsMobile/app/cache/dev/doctrine/orm/Proxies');
-        $instance->setProxyNamespace('Proxies');
-        $instance->setAutoGenerateProxyClasses(true);
-        $instance->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
-
-        return $instance;
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'symfony', 'host' => 'localhost', 'user' => 'root', 'password' => '', 'driver' => 'pdo_mysql', 'port' => NULL, 'driverOptions' => array()), $a, $b, array());
     }
 
     /**
@@ -382,20 +212,43 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
-        return $this->services['doctrine.orm.default_entity_manager'] = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $this->get('doctrine.orm.default_configuration'));
+        $a = new \Doctrine\Common\Cache\ArrayCache();
+        $a->setNamespace('sf2orm_default_9b8fddf7b8ea3c45634dcba55dbce0f7');
+
+        $b = new \Doctrine\Common\Cache\ArrayCache();
+        $b->setNamespace('sf2orm_default_9b8fddf7b8ea3c45634dcba55dbce0f7');
+
+        $c = new \Doctrine\Common\Cache\ArrayCache();
+        $c->setNamespace('sf2orm_default_9b8fddf7b8ea3c45634dcba55dbce0f7');
+
+        $d = new \Doctrine\ORM\Mapping\Driver\DriverChain();
+        $d->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(new \Symfony\Bridge\Doctrine\Annotations\IndexedReader($this->get('annotation_reader')), array(0 => '/var/www/symfony_yukakami/src/Semdrops/SemdropsMobileBundle/Entity')), 'Semdrops\\SemdropsMobileBundle\\Entity');
+
+        $e = new \Doctrine\ORM\Configuration();
+        $e->setEntityNamespaces(array('SemdropsSemdropsMobileBundle' => 'Semdrops\\SemdropsMobileBundle\\Entity'));
+        $e->setMetadataCacheImpl($a);
+        $e->setQueryCacheImpl($b);
+        $e->setResultCacheImpl($c);
+        $e->setMetadataDriverImpl($d);
+        $e->setProxyDir('/var/www/symfony_yukakami/app/cache/dev/doctrine/orm/Proxies');
+        $e->setProxyNamespace('Proxies');
+        $e->setAutoGenerateProxyClasses(true);
+        $e->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
+
+        return $this->services['doctrine.orm.default_entity_manager'] = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $e);
     }
 
     /**
-     * Gets the 'error_handler' service.
+     * Gets the 'doctrine.orm.validator.unique' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Component\HttpKernel\Debug\ErrorHandler A Symfony\Component\HttpKernel\Debug\ErrorHandler instance.
+     * @return Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator A Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator instance.
      */
-    protected function getErrorHandlerService()
+    protected function getDoctrine_Orm_Validator_UniqueService()
     {
-        return $this->services['error_handler'] = new \Symfony\Component\HttpKernel\Debug\ErrorHandler('');
+        return $this->services['doctrine.orm.validator.unique'] = new \Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($this->get('doctrine'));
     }
 
     /**
@@ -410,25 +263,25 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['event_dispatcher'] = $instance = new \Symfony\Bundle\FrameworkBundle\Debug\TraceableEventDispatcher($this, $this->get('monolog.logger.event'));
 
-        $instance->addListenerService('onCoreRequest', 'request_listener', 0);
-        $instance->addListenerService('onCoreResponse', 'response_listener', 0);
-        $instance->addListenerService('onCoreException', 'exception_listener', -128);
-        $instance->addListenerService('onCoreResponse', 'profiler_listener', 0);
-        $instance->addListenerService('onCoreException', 'profiler_listener', 0);
-        $instance->addListenerService('onCoreRequest', 'profiler_listener', 0);
-        $instance->addListenerService('onCoreController', 'data_collector.request', 0);
-        $instance->addListenerService('onCoreRequest', 'security.firewall', -128);
-        $instance->addListenerService('onCoreResponse', 'security.rememberme.response_listener', 0);
-        $instance->addListenerService('onCoreResponse', 'monolog.handler.firephp', 0);
-        $instance->addListenerService('onCoreRequest', 'assetic.request_listener', 0);
-        $instance->addListenerService('onCoreController', 'annotations.controller_parser', 0);
-        $instance->addListenerService('onCoreController', 'converter.listener', 0);
-        $instance->addListenerService('onCoreController', 'view.template_annotation', 0);
-        $instance->addListenerService('onCoreView', 'view.template_annotation', 0);
-        $instance->addListenerService('onCoreResponse', 'cache.annotation', 0);
-        $instance->addListenerService('onCoreController', 'security.extra.controller_listener', -255);
-        $instance->addListenerService('onCoreController', 'acme.demo.listener', 0);
-        $instance->addListenerService('onCoreResponse', 'web_profiler.debug.toolbar', -128);
+        $instance->addListenerService('kernel.request', array(0 => 'router_listener', 1 => 'onEarlyKernelRequest'), 255);
+        $instance->addListenerService('kernel.request', array(0 => 'router_listener', 1 => 'onKernelRequest'), 0);
+        $instance->addListenerService('kernel.request', array(0 => 'session_listener', 1 => 'onKernelRequest'), 128);
+        $instance->addListenerService('kernel.response', array(0 => 'response_listener', 1 => 'onKernelResponse'), 0);
+        $instance->addListenerService('kernel.exception', array(0 => 'exception_listener', 1 => 'onKernelException'), -128);
+        $instance->addListenerService('kernel.response', array(0 => 'profiler_listener', 1 => 'onKernelResponse'), -100);
+        $instance->addListenerService('kernel.exception', array(0 => 'profiler_listener', 1 => 'onKernelException'), 0);
+        $instance->addListenerService('kernel.controller', array(0 => 'data_collector.request', 1 => 'onKernelController'), 0);
+        $instance->addListenerService('kernel.request', array(0 => 'security.firewall', 1 => 'onKernelRequest'), 64);
+        $instance->addListenerService('kernel.response', array(0 => 'security.rememberme.response_listener', 1 => 'onKernelResponse'), 0);
+        $instance->addListenerService('kernel.response', array(0 => 'monolog.handler.firephp', 1 => 'onKernelResponse'), 0);
+        $instance->addListenerService('kernel.request', array(0 => 'assetic.request_listener', 1 => 'onKernelRequest'), 0);
+        $instance->addListenerService('kernel.controller', array(0 => 'sensio_framework_extra.controller.listener', 1 => 'onKernelController'), 0);
+        $instance->addListenerService('kernel.controller', array(0 => 'sensio_framework_extra.converter.listener', 1 => 'onKernelController'), 0);
+        $instance->addListenerService('kernel.controller', array(0 => 'sensio_framework_extra.view.listener', 1 => 'onKernelController'), 0);
+        $instance->addListenerService('kernel.view', array(0 => 'sensio_framework_extra.view.listener', 1 => 'onKernelView'), 0);
+        $instance->addListenerService('kernel.response', array(0 => 'sensio_framework_extra.cache.listener', 1 => 'onKernelResponse'), 0);
+        $instance->addListenerService('kernel.controller', array(0 => 'security.extra.controller_listener', 1 => 'onCoreController'), -255);
+        $instance->addListenerService('kernel.response', array(0 => 'web_profiler.debug_toolbar', 1 => 'onKernelResponse'), -128);
 
         return $instance;
     }
@@ -439,24 +292,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Component\HttpKernel\Debug\ExceptionListener A Symfony\Component\HttpKernel\Debug\ExceptionListener instance.
+     * @return Symfony\Component\HttpKernel\EventListener\ExceptionListener A Symfony\Component\HttpKernel\EventListener\ExceptionListener instance.
      */
     protected function getExceptionListenerService()
     {
-        return $this->services['exception_listener'] = new \Symfony\Component\HttpKernel\Debug\ExceptionListener('Symfony\\Bundle\\FrameworkBundle\\Controller\\ExceptionController::showAction', $this->get('monolog.logger.request'));
-    }
-
-    /**
-     * Gets the 'file.temporary_storage' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Component\HttpFoundation\File\SessionBasedTemporaryStorage A Symfony\Component\HttpFoundation\File\SessionBasedTemporaryStorage instance.
-     */
-    protected function getFile_TemporaryStorageService()
-    {
-        return $this->services['file.temporary_storage'] = new \Symfony\Component\HttpFoundation\File\SessionBasedTemporaryStorage($this->get('session'), 'ThisTokenIsNotSoSecretChangeIt', '/var/www/SymfonySemdropsMobile/app/cache/dev/upload');
+        return $this->services['exception_listener'] = new \Symfony\Component\HttpKernel\EventListener\ExceptionListener('Symfony\\Bundle\\FrameworkBundle\\Controller\\ExceptionController::showAction', $this->get('monolog.logger.request'));
     }
 
     /**
@@ -469,7 +309,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getFileLocatorService()
     {
-        return $this->services['file_locator'] = new \Symfony\Component\HttpKernel\Config\FileLocator($this->get('kernel'), '/var/www/SymfonySemdropsMobile/app/Resources');
+        return $this->services['file_locator'] = new \Symfony\Component\HttpKernel\Config\FileLocator($this->get('kernel'), '/var/www/symfony_yukakami/app/Resources');
     }
 
     /**
@@ -508,7 +348,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_FactoryService()
     {
-        return $this->services['form.factory'] = new \Symfony\Component\Form\FormFactory(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('field' => 'form.type.field', 'form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'csrf' => 'form.type.csrf', 'entity' => 'form.type.entity'), array('field' => array(0 => 'form.type_extension.field'), 'form' => array(0 => 'form.type_extension.csrf')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))));
+        return $this->services['form.factory'] = new \Symfony\Component\Form\FormFactory(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('field' => 'form.type.field', 'form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'csrf' => 'form.type.csrf', 'entity' => 'form.type.entity'), array('field' => array(0 => 'form.type_extension.field'), 'form' => array(0 => 'form.type_extension.csrf')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))));
     }
 
     /**
@@ -638,7 +478,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_Type_EntityService()
     {
-        return $this->services['form.type.entity'] = new \Symfony\Bridge\Doctrine\Form\Type\EntityType($this->get('doctrine.orm.default_entity_manager'));
+        return $this->services['form.type.entity'] = new \Symfony\Bridge\Doctrine\Form\Type\EntityType($this->get('doctrine'));
     }
 
     /**
@@ -664,7 +504,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_Type_FileService()
     {
-        return $this->services['form.type.file'] = new \Symfony\Component\Form\Extension\Core\Type\FileType($this->get('file.temporary_storage'));
+        return $this->services['form.type.file'] = new \Symfony\Component\Form\Extension\Core\Type\FileType();
     }
 
     /**
@@ -811,6 +651,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'form.type.search' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Component\Form\Extension\Core\Type\SearchType A Symfony\Component\Form\Extension\Core\Type\SearchType instance.
+     */
+    protected function getForm_Type_SearchService()
+    {
+        return $this->services['form.type.search'] = new \Symfony\Component\Form\Extension\Core\Type\SearchType();
+    }
+
+    /**
      * Gets the 'form.type.text' service.
      *
      * This service is shared.
@@ -911,7 +764,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_TypeGuesser_DoctrineService()
     {
-        return $this->services['form.type_guesser.doctrine'] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser($this->get('doctrine.orm.default_entity_manager'));
+        return $this->services['form.type_guesser.doctrine'] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser($this->get('doctrine'));
     }
 
     /**
@@ -959,11 +812,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getLoggerService()
     {
-        $this->services['logger'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('app');
+        $this->services['logger'] = $instance = new \Symfony\Bridge\Monolog\Logger('app');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -982,8 +835,6 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getMailerService()
     {
-        require_once '/var/www/SymfonySemdropsMobile/vendor/swiftmailer/lib/swift_init.php';
-
         return $this->services['mailer'] = new \Swift_Mailer($this->get('swiftmailer.transport'));
     }
 
@@ -993,11 +844,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\DebugHandler A Symfony\Bundle\MonologBundle\Logger\DebugHandler instance.
+     * @return Symfony\Bridge\Monolog\Handler\DebugHandler A Symfony\Bridge\Monolog\Handler\DebugHandler instance.
      */
     protected function getMonolog_Handler_DebugService()
     {
-        return $this->services['monolog.handler.debug'] = new \Symfony\Bundle\MonologBundle\Logger\DebugHandler(100, true);
+        return $this->services['monolog.handler.debug'] = new \Symfony\Bridge\Monolog\Handler\DebugHandler(100, true);
     }
 
     /**
@@ -1006,11 +857,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\FirePHPHandler A Symfony\Bundle\MonologBundle\Logger\FirePHPHandler instance.
+     * @return Symfony\Bridge\Monolog\Handler\FirePHPHandler A Symfony\Bridge\Monolog\Handler\FirePHPHandler instance.
      */
     protected function getMonolog_Handler_FirephpService()
     {
-        return $this->services['monolog.handler.firephp'] = new \Symfony\Bundle\MonologBundle\Logger\FirePHPHandler(200, false);
+        return $this->services['monolog.handler.firephp'] = new \Symfony\Bridge\Monolog\Handler\FirePHPHandler(200, true);
     }
 
     /**
@@ -1023,7 +874,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getMonolog_Handler_MainService()
     {
-        return $this->services['monolog.handler.main'] = new \Monolog\Handler\StreamHandler('/var/www/SymfonySemdropsMobile/app/logs/dev.log', 100, false);
+        return $this->services['monolog.handler.main'] = new \Monolog\Handler\StreamHandler('/var/www/symfony_yukakami/app/logs/dev.log', 100, true);
     }
 
     /**
@@ -1032,11 +883,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_DoctrineService()
     {
-        $this->services['monolog.logger.doctrine'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('doctrine');
+        $this->services['monolog.logger.doctrine'] = $instance = new \Symfony\Bridge\Monolog\Logger('doctrine');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1051,11 +902,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_EventService()
     {
-        $this->services['monolog.logger.event'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('event');
+        $this->services['monolog.logger.event'] = $instance = new \Symfony\Bridge\Monolog\Logger('event');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1070,11 +921,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_ProfilerService()
     {
-        $this->services['monolog.logger.profiler'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('profiler');
+        $this->services['monolog.logger.profiler'] = $instance = new \Symfony\Bridge\Monolog\Logger('profiler');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1089,11 +940,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_RequestService()
     {
-        $this->services['monolog.logger.request'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('request');
+        $this->services['monolog.logger.request'] = $instance = new \Symfony\Bridge\Monolog\Logger('request');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1108,11 +959,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_RouterService()
     {
-        $this->services['monolog.logger.router'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('router');
+        $this->services['monolog.logger.router'] = $instance = new \Symfony\Bridge\Monolog\Logger('router');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1127,11 +978,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_SecurityService()
     {
-        $this->services['monolog.logger.security'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('security');
+        $this->services['monolog.logger.security'] = $instance = new \Symfony\Bridge\Monolog\Logger('security');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1146,11 +997,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\MonologBundle\Logger\Logger A Symfony\Bundle\MonologBundle\Logger\Logger instance.
+     * @return Symfony\Bridge\Monolog\Logger A Symfony\Bridge\Monolog\Logger instance.
      */
     protected function getMonolog_Logger_TemplatingService()
     {
-        $this->services['monolog.logger.templating'] = $instance = new \Symfony\Bundle\MonologBundle\Logger\Logger('templating');
+        $this->services['monolog.logger.templating'] = $instance = new \Symfony\Bridge\Monolog\Logger('templating');
 
         $instance->pushHandler($this->get('monolog.handler.main'));
         $instance->pushHandler($this->get('monolog.handler.firephp'));
@@ -1169,22 +1020,24 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getProfilerService()
     {
-        if (!isset($this->scopedServices['request'])) {
-            throw new InactiveScopeException('profiler', 'request');
-        }
+        $a = $this->get('monolog.logger.profiler');
+        $b = $this->get('kernel');
 
-        $this->services['profiler'] = $this->scopedServices['request']['profiler'] = $instance = new \Symfony\Component\HttpKernel\Profiler\Profiler($this->get('profiler.storage'), $this->get('monolog.logger.profiler'));
+        $c = new \Symfony\Component\HttpKernel\DataCollector\EventDataCollector();
+        $c->setEventDispatcher($this->get('event_dispatcher'));
 
-        $instance->add($this->get('data_collector.config'));
+        $this->services['profiler'] = $instance = new \Symfony\Component\HttpKernel\Profiler\Profiler(new \Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage('sqlite:/var/www/symfony_yukakami/app/cache/dev/profiler.db', '', '', 86400), $a);
+
+        $instance->add(new \Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector($b));
         $instance->add($this->get('data_collector.request'));
-        $instance->add($this->get('data_collector.exception'));
-        $instance->add($this->get('data_collector.events'));
-        $instance->add($this->get('data_collector.logger'));
-        $instance->add($this->get('data_collector.timer'));
-        $instance->add($this->get('data_collector.memory'));
-        $instance->add($this->get('data_collector.security'));
-        $instance->add($this->get('swiftmailer.data_collector'));
-        $instance->add($this->get('data_collector.doctrine'));
+        $instance->add(new \Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector());
+        $instance->add($c);
+        $instance->add(new \Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector($a));
+        $instance->add(new \Symfony\Bundle\FrameworkBundle\DataCollector\TimerDataCollector($b));
+        $instance->add(new \Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector());
+        $instance->add(new \Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector($this->get('security.context')));
+        $instance->add(new \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector($this, false));
+        $instance->add(new \Symfony\Bridge\Doctrine\DataCollector\DoctrineDataCollector($this->get('doctrine'), $this->get('doctrine.dbal.logger')));
 
         return $instance;
     }
@@ -1195,11 +1048,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\FrameworkBundle\Profiler\ProfilerListener A Symfony\Bundle\FrameworkBundle\Profiler\ProfilerListener instance.
+     * @return Symfony\Component\HttpKernel\EventListener\ProfilerListener A Symfony\Component\HttpKernel\EventListener\ProfilerListener instance.
      */
     protected function getProfilerListenerService()
     {
-        return $this->services['profiler_listener'] = new \Symfony\Bundle\FrameworkBundle\Profiler\ProfilerListener($this, NULL, false, false);
+        return $this->services['profiler_listener'] = new \Symfony\Component\HttpKernel\EventListener\ProfilerListener($this->get('profiler'), NULL, false, false);
     }
 
     /**
@@ -1220,86 +1073,69 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'request_listener' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\FrameworkBundle\RequestListener A Symfony\Bundle\FrameworkBundle\RequestListener instance.
-     */
-    protected function getRequestListenerService()
-    {
-        return $this->services['request_listener'] = new \Symfony\Bundle\FrameworkBundle\RequestListener($this, $this->get('router.real'), 80, 443, $this->get('monolog.logger.request'));
-    }
-
-    /**
      * Gets the 'response_listener' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Component\HttpKernel\ResponseListener A Symfony\Component\HttpKernel\ResponseListener instance.
+     * @return Symfony\Component\HttpKernel\EventListener\ResponseListener A Symfony\Component\HttpKernel\EventListener\ResponseListener instance.
      */
     protected function getResponseListenerService()
     {
-        return $this->services['response_listener'] = new \Symfony\Component\HttpKernel\ResponseListener('UTF-8');
+        return $this->services['response_listener'] = new \Symfony\Component\HttpKernel\EventListener\ResponseListener('UTF-8');
     }
 
     /**
-     * Gets the 'router.cached' service.
+     * Gets the 'router' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\FrameworkBundle\Routing\CachedRouter A Symfony\Bundle\FrameworkBundle\Routing\CachedRouter instance.
+     * @return Symfony\Bundle\FrameworkBundle\Routing\Router A Symfony\Bundle\FrameworkBundle\Routing\Router instance.
      */
-    protected function getRouter_CachedService()
+    protected function getRouterService()
     {
-        return $this->services['router.cached'] = new \Symfony\Bundle\FrameworkBundle\Routing\CachedRouter('/var/www/SymfonySemdropsMobile/app/cache/dev', 'appdevUrlMatcher', 'appdevUrlGenerator');
+        return $this->services['router'] = new \Symfony\Bundle\FrameworkBundle\Routing\Router($this, '/var/www/symfony_yukakami/app/config/routing_dev.yml', array('cache_dir' => '/var/www/symfony_yukakami/app/cache/dev', 'debug' => true, 'generator_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_base_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_dumper_class' => 'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper', 'generator_cache_class' => 'appdevUrlGenerator', 'matcher_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_base_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper', 'matcher_cache_class' => 'appdevUrlMatcher'));
     }
 
     /**
-     * Gets the 'router.real' service.
+     * Gets the 'router_listener' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Component\Routing\Router A Symfony\Component\Routing\Router instance.
+     * @return Symfony\Bundle\FrameworkBundle\EventListener\RouterListener A Symfony\Bundle\FrameworkBundle\EventListener\RouterListener instance.
      */
-    protected function getRouter_RealService()
+    protected function getRouterListenerService()
     {
-        return $this->services['router.real'] = new \Symfony\Component\Routing\Router(new \Symfony\Bundle\FrameworkBundle\Routing\LazyLoader($this, 'routing.loader.real'), '/var/www/SymfonySemdropsMobile/app/config/routing_dev.yml', array('cache_dir' => '/var/www/SymfonySemdropsMobile/app/cache/dev', 'debug' => true, 'generator_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_base_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_dumper_class' => 'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper', 'generator_cache_class' => 'appdevUrlGenerator', 'matcher_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_base_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper', 'matcher_cache_class' => 'appdevUrlMatcher'));
+        return $this->services['router_listener'] = new \Symfony\Bundle\FrameworkBundle\EventListener\RouterListener($this->get('router'), 80, 443, $this->get('monolog.logger.request'));
     }
 
     /**
-     * Gets the 'routing.loader.real' service.
+     * Gets the 'routing.loader' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
      * @return Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader A Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader instance.
      */
-    protected function getRouting_Loader_RealService()
+    protected function getRouting_LoaderService()
     {
         $a = $this->get('file_locator');
-        $b = $this->get('annotations.reader');
-        $c = $this->get('annotations.configuration_reader');
+        $b = $this->get('annotation_reader');
 
-        $d = new \Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader($b, $c);
-        $d->setRouteAnnotationClass('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route');
-        $d->setRoutesAnnotationClass('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Routes');
+        $c = new \Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader($b);
 
-        $e = new \Symfony\Component\Config\Loader\LoaderResolver();
-        $e->addLoader(new \Symfony\Component\Routing\Loader\XmlFileLoader($a));
-        $e->addLoader(new \Symfony\Component\Routing\Loader\YamlFileLoader($a));
-        $e->addLoader(new \Symfony\Component\Routing\Loader\PhpFileLoader($a));
-        $e->addLoader(new \Symfony\Bundle\AsseticBundle\Routing\AsseticLoader($this->get('assetic.asset_manager')));
-        $e->addLoader(new \Symfony\Component\Routing\Loader\AnnotationGlobLoader($a, $d));
-        $e->addLoader(new \Symfony\Component\Routing\Loader\AnnotationDirectoryLoader($a, $d));
-        $e->addLoader(new \Symfony\Component\Routing\Loader\AnnotationFileLoader($a, $d));
-        $e->addLoader($d);
+        $d = new \Symfony\Component\Config\Loader\LoaderResolver();
+        $d->addLoader(new \Symfony\Component\Routing\Loader\XmlFileLoader($a));
+        $d->addLoader(new \Symfony\Component\Routing\Loader\YamlFileLoader($a));
+        $d->addLoader(new \Symfony\Component\Routing\Loader\PhpFileLoader($a));
+        $d->addLoader(new \Symfony\Bundle\AsseticBundle\Routing\AsseticLoader($this->get('assetic.asset_manager')));
+        $d->addLoader(new \Symfony\Component\Routing\Loader\AnnotationDirectoryLoader($a, $c));
+        $d->addLoader(new \Symfony\Component\Routing\Loader\AnnotationFileLoader($a, $c));
+        $d->addLoader($c);
 
-        return $this->services['routing.loader.real'] = new \Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader($this->get('controller_name_converter'), $this->get('monolog.logger.router'), $e);
+        return $this->services['routing.loader'] = new \Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader($this->get('controller_name_converter'), $this->get('monolog.logger.router'), $d);
     }
 
     /**
@@ -1351,7 +1187,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Extra_ControllerListenerService()
     {
-        return $this->services['security.extra.controller_listener'] = new \JMS\SecurityExtraBundle\Controller\ControllerListener($this);
+        return $this->services['security.extra.controller_listener'] = new \JMS\SecurityExtraBundle\Controller\ControllerListener($this, $this->get('annotation_reader'));
     }
 
     /**
@@ -1364,33 +1200,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_FirewallService()
     {
-        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.profiler' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/_profiler'), 'security.firewall.map.context.wdt' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/_wdt'), 'security.firewall.map.context.login' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/demo/secured/login$'), 'security.firewall.map.context.secured_area' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/demo/secured/'))), $this->get('event_dispatcher'));
-    }
-
-    /**
-     * Gets the 'security.firewall.map.context.login' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
-     */
-    protected function getSecurity_Firewall_Map_Context_LoginService()
-    {
-        return $this->services['security.firewall.map.context.login'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(), NULL);
-    }
-
-    /**
-     * Gets the 'security.firewall.map.context.profiler' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
-     */
-    protected function getSecurity_Firewall_Map_Context_ProfilerService()
-    {
-        return $this->services['security.firewall.map.context.profiler'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(), NULL);
+        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.secured_area' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/'))), $this->get('event_dispatcher'));
     }
 
     /**
@@ -1406,27 +1216,20 @@ class appDevDebugProjectContainer extends Container
         $a = $this->get('monolog.logger.security');
         $b = $this->get('security.context');
         $c = $this->get('event_dispatcher');
-        $d = $this->get('security.authentication.manager');
+        $d = $this->get('router');
+        $e = $this->get('security.authentication.manager');
 
-        $e = new \Symfony\Component\Security\Http\AccessMap();
+        $f = new \Symfony\Component\HttpFoundation\RequestMatcher('^/semdrops/*');
 
-        $f = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, '/demo/secured/logout', '/demo/', NULL);
-        $f->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
+        $g = new \Symfony\Component\Security\Http\AccessMap();
+        $g->add($f, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
 
-        return $this->services['security.firewall.map.context.secured_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($e, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.in_memory')), 'secured_area', $a, $c), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $d, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), 'secured_area', array('check_path' => '/demo/secured/login_check', 'login_path' => '/demo/secured/login', 'use_forward' => false, 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false, 'failure_path' => NULL, 'failure_forward' => false, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'csrf_page_id' => 'form_login', 'post_only' => true), NULL, NULL, $a, $c), 4 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $e, $d, $a)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($this->get('http_kernel'), '/demo/secured/login', false), NULL, NULL, $a));
-    }
+        $h = new \Symfony\Component\Security\Http\HttpUtils($d);
 
-    /**
-     * Gets the 'security.firewall.map.context.wdt' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
-     */
-    protected function getSecurity_Firewall_Map_Context_WdtService()
-    {
-        return $this->services['security.firewall.map.context.wdt'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(), NULL);
+        $i = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $h, '/semdrops/user/logout/', '/semdrops/', NULL);
+        $i->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
+
+        return $this->services['security.firewall.map.context.secured_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($g, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.in_memory')), 'secured_area', $a, $c), 2 => $i, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $e, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $h, 'secured_area', array('check_path' => '/semdrops/login_check/', 'login_path' => '/semdrops/login/', 'always_use_default_target_path' => true, 'default_target_path' => '/semdrops/user/', 'use_forward' => false, 'target_path_parameter' => '_target_path', 'use_referer' => false, 'failure_path' => NULL, 'failure_forward' => false, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), NULL, NULL, $a, $c), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '4e4c19155e418', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $g, $e, $a)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $h, new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($this->get('http_kernel'), $h, '/semdrops/login/', false), NULL, NULL, $a));
     }
 
     /**
@@ -1435,11 +1238,106 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\SecurityBundle\ResponseListener A Symfony\Bundle\SecurityBundle\ResponseListener instance.
+     * @return Symfony\Bundle\SecurityBundle\EventListener\ResponseListener A Symfony\Bundle\SecurityBundle\EventListener\ResponseListener instance.
      */
     protected function getSecurity_Rememberme_ResponseListenerService()
     {
-        return $this->services['security.rememberme.response_listener'] = new \Symfony\Bundle\SecurityBundle\ResponseListener();
+        return $this->services['security.rememberme.response_listener'] = new \Symfony\Bundle\SecurityBundle\EventListener\ResponseListener();
+    }
+
+    /**
+     * Gets the 'sensio.distribution.webconfigurator' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\DistributionBundle\Configurator\Configurator A Sensio\Bundle\DistributionBundle\Configurator\Configurator instance.
+     */
+    protected function getSensio_Distribution_WebconfiguratorService()
+    {
+        return $this->services['sensio.distribution.webconfigurator'] = new \Sensio\Bundle\DistributionBundle\Configurator\Configurator('/var/www/symfony_yukakami/app');
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.cache.listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener A Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener instance.
+     */
+    protected function getSensioFrameworkExtra_Cache_ListenerService()
+    {
+        return $this->services['sensio_framework_extra.cache.listener'] = new \Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener();
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.controller.listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener A Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener instance.
+     */
+    protected function getSensioFrameworkExtra_Controller_ListenerService()
+    {
+        return $this->services['sensio_framework_extra.controller.listener'] = new \Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener($this->get('annotation_reader'));
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.converter.doctrine.orm' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter A Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter instance.
+     */
+    protected function getSensioFrameworkExtra_Converter_Doctrine_OrmService()
+    {
+        return $this->services['sensio_framework_extra.converter.doctrine.orm'] = new \Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter($this->get('doctrine'));
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.converter.listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener A Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener instance.
+     */
+    protected function getSensioFrameworkExtra_Converter_ListenerService()
+    {
+        return $this->services['sensio_framework_extra.converter.listener'] = new \Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener($this->get('sensio_framework_extra.converter.manager'));
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.converter.manager' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager A Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager instance.
+     */
+    protected function getSensioFrameworkExtra_Converter_ManagerService()
+    {
+        $this->services['sensio_framework_extra.converter.manager'] = $instance = new \Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager(array());
+
+        $instance->add($this->get('sensio_framework_extra.converter.doctrine.orm'), 0);
+
+        return $instance;
+    }
+
+    /**
+     * Gets the 'sensio_framework_extra.view.listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener A Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener instance.
+     */
+    protected function getSensioFrameworkExtra_View_ListenerService()
+    {
+        return $this->services['sensio_framework_extra.view.listener'] = new \Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener($this);
     }
 
     /**
@@ -1482,7 +1380,33 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSession_StorageService()
     {
-        return $this->services['session.storage'] = new \Symfony\Component\HttpFoundation\SessionStorage\NativeSessionStorage(array('lifetime' => 3600));
+        return $this->services['session.storage'] = new \Symfony\Component\HttpFoundation\SessionStorage\NativeSessionStorage(array());
+    }
+
+    /**
+     * Gets the 'session_listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Bundle\FrameworkBundle\EventListener\SessionListener A Symfony\Bundle\FrameworkBundle\EventListener\SessionListener instance.
+     */
+    protected function getSessionListenerService()
+    {
+        return $this->services['session_listener'] = new \Symfony\Bundle\FrameworkBundle\EventListener\SessionListener($this);
+    }
+
+    /**
+     * Gets the 'swiftmailer.plugin.messagelogger' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger A Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger instance.
+     */
+    protected function getSwiftmailer_Plugin_MessageloggerService()
+    {
+        return $this->services['swiftmailer.plugin.messagelogger'] = new \Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger();
     }
 
     /**
@@ -1509,19 +1433,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'symfony.webconfigurator' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\WebConfiguratorBundle\Configurator A Symfony\Bundle\WebConfiguratorBundle\Configurator instance.
-     */
-    protected function getSymfony_WebconfiguratorService()
-    {
-        return $this->services['symfony.webconfigurator'] = new \Symfony\Bundle\WebConfiguratorBundle\Configurator('/var/www/SymfonySemdropsMobile/app');
-    }
-
-    /**
      * Gets the 'templating' service.
      *
      * This service is shared.
@@ -1532,6 +1443,19 @@ class appDevDebugProjectContainer extends Container
     protected function getTemplatingService()
     {
         return $this->services['templating'] = new \Symfony\Bundle\TwigBundle\TwigEngine($this->get('twig'), $this->get('templating.name_parser'), $this->get('templating.globals'));
+    }
+
+    /**
+     * Gets the 'templating.asset.package_factory' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Symfony\Bundle\FrameworkBundle\Templating\Asset\PackageFactory A Symfony\Bundle\FrameworkBundle\Templating\Asset\PackageFactory instance.
+     */
+    protected function getTemplating_Asset_PackageFactoryService()
+    {
+        return $this->services['templating.asset.package_factory'] = new \Symfony\Bundle\FrameworkBundle\Templating\Asset\PackageFactory($this);
     }
 
     /**
@@ -1566,11 +1490,15 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper A Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper instance.
+     * @return Symfony\Component\Templating\Helper\CoreAssetsHelper A Symfony\Component\Templating\Helper\CoreAssetsHelper instance.
      */
     protected function getTemplating_Helper_AssetsService()
     {
-        return $this->services['templating.helper.assets'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper($this->get('request'), array(), NULL, array());
+        if (!isset($this->scopedServices['request'])) {
+            throw new InactiveScopeException('templating.helper.assets', 'request');
+        }
+
+        return $this->services['templating.helper.assets'] = $this->scopedServices['request']['templating.helper.assets'] = new \Symfony\Component\Templating\Helper\CoreAssetsHelper(new \Symfony\Bundle\FrameworkBundle\Templating\Asset\PathPackage($this->get('request'), NULL, NULL), array());
     }
 
     /**
@@ -1583,7 +1511,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplating_Helper_CodeService()
     {
-        return $this->services['templating.helper.code'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper('', '/var/www/SymfonySemdropsMobile/app');
+        return $this->services['templating.helper.code'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper('', '/var/www/symfony_yukakami/app');
     }
 
     /**
@@ -1600,7 +1528,7 @@ class appDevDebugProjectContainer extends Container
         $a->setCharset('UTF-8');
         $a->setHelpers(array('slots' => 'templating.helper.slots', 'assets' => 'templating.helper.assets', 'request' => 'templating.helper.request', 'session' => 'templating.helper.session', 'router' => 'templating.helper.router', 'actions' => 'templating.helper.actions', 'code' => 'templating.helper.code', 'translator' => 'templating.helper.translator', 'form' => 'templating.helper.form', 'security' => 'templating.helper.security', 'assetic' => 'assetic.helper.dynamic'));
 
-        return $this->services['templating.helper.form'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\FormHelper($a);
+        return $this->services['templating.helper.form'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\FormHelper($a, array(0 => 'FrameworkBundle:Form'));
     }
 
     /**
@@ -1626,7 +1554,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplating_Helper_RouterService()
     {
-        return $this->services['templating.helper.router'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper($this->get('router.real'));
+        return $this->services['templating.helper.router'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper($this->get('router'));
     }
 
     /**
@@ -1692,19 +1620,6 @@ class appDevDebugProjectContainer extends Container
     protected function getTemplating_LoaderService()
     {
         return $this->services['templating.loader'] = new \Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader($this->get('templating.locator'));
-    }
-
-    /**
-     * Gets the 'templating.locator' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator A Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator instance.
-     */
-    protected function getTemplating_LocatorService()
-    {
-        return $this->services['templating.locator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator($this->get('file_locator'));
     }
 
     /**
@@ -1782,7 +1697,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTranslator_RealService()
     {
-        return $this->services['translator.real'] = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, $this->get('translator.selector'), array('translation.loader.php' => 'php', 'translation.loader.yml' => 'yml', 'translation.loader.xliff' => 'xliff'), array('cache_dir' => '/var/www/SymfonySemdropsMobile/app/cache/dev/translations', 'debug' => true), $this->get('session'));
+        return $this->services['translator.real'] = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, $this->get('translator.selector'), array('translation.loader.php' => 'php', 'translation.loader.yml' => 'yml', 'translation.loader.xliff' => 'xliff'), array('cache_dir' => '/var/www/symfony_yukakami/app/cache/dev/translations', 'debug' => true), $this->get('session'));
     }
 
     /**
@@ -1795,16 +1710,17 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTwigService()
     {
-        $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'cache' => '/var/www/SymfonySemdropsMobile/app/cache/dev/twig', 'charset' => 'UTF-8'));
+        $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'cache' => '/var/www/symfony_yukakami/app/cache/dev/twig', 'charset' => 'UTF-8'));
 
         $instance->addExtension(new \Symfony\Bundle\SecurityBundle\Twig\Extension\SecurityExtension($this->get('security.context')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($this->get('translator')));
-        $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\TemplatingExtension($this));
-        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\RoutingExtension($this->get('router.real')));
+        $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\AssetsExtension($this));
+        $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\ActionsExtension($this));
+        $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\CodeExtension($this));
+        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\RoutingExtension($this->get('router')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\YamlExtension());
-        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(array(0 => 'TwigBundle:Form:div_layout.html.twig')));
+        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(array(0 => 'form_div_layout.html.twig')));
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), true, array()));
-        $instance->addExtension($this->get('twig.extension.acme.demo'));
 
         return $instance;
     }
@@ -1819,7 +1735,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTwig_LoaderService()
     {
-        return $this->services['twig.loader'] = new \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader($this->get('templating.locator'), $this->get('templating.name_parser'));
+        $this->services['twig.loader'] = $instance = new \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader($this->get('templating.locator'), $this->get('templating.name_parser'));
+
+        $instance->addPath('/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/TwigBundle/DependencyInjection/../../../Bridge/Twig/Resources/views/Form');
+
+        return $instance;
     }
 
     /**
@@ -1832,43 +1752,20 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getValidatorService()
     {
-        return $this->services['validator'] = new \Symfony\Component\Validator\Validator($this->get('validator.mapping.class_metadata_factory'), new \Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory($this, array()));
+        return $this->services['validator'] = new \Symfony\Component\Validator\Validator($this->get('validator.mapping.class_metadata_factory'), new \Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory($this, array('doctrine.orm.validator.unique' => 'doctrine.orm.validator.unique')));
     }
 
     /**
-     * Gets the 'view.template_annotation' service.
+     * Gets the 'web_profiler.debug_toolbar' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Sensio\Bundle\FrameworkExtraBundle\View\AnnotationTemplateListener A Sensio\Bundle\FrameworkExtraBundle\View\AnnotationTemplateListener instance.
+     * @return Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener A Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener instance.
      */
-    protected function getView_TemplateAnnotationService()
+    protected function getWebProfiler_DebugToolbarService()
     {
-        return $this->services['view.template_annotation'] = new \Sensio\Bundle\FrameworkExtraBundle\View\AnnotationTemplateListener($this);
-    }
-
-    /**
-     * Gets the 'web_profiler.debug.toolbar' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Bundle\WebProfilerBundle\WebDebugToolbarListener A Symfony\Bundle\WebProfilerBundle\WebDebugToolbarListener instance.
-     */
-    protected function getWebProfiler_Debug_ToolbarService()
-    {
-        return $this->services['web_profiler.debug.toolbar'] = new \Symfony\Bundle\WebProfilerBundle\WebDebugToolbarListener($this->get('templating'), false, true);
-    }
-
-    /**
-     * Gets the annotations.cache service alias.
-     *
-     * @return Doctrine\Common\Cache\ArrayCache An instance of the annotations.cache.array service
-     */
-    protected function getAnnotations_CacheService()
-    {
-        return $this->get('annotations.cache.array');
+        return $this->services['web_profiler.debug_toolbar'] = new \Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener($this->get('templating'), false, 2);
     }
 
     /**
@@ -1902,16 +1799,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the router service alias.
-     *
-     * @return Symfony\Component\Routing\Router An instance of the router.real service
-     */
-    protected function getRouterService()
-    {
-        return $this->get('router.real');
-    }
-
-    /**
      * Gets the 'assetic.asset_factory' service.
      *
      * This service is shared.
@@ -1925,9 +1812,8 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_AssetFactoryService()
     {
-        $this->services['assetic.asset_factory'] = $instance = new \Symfony\Bundle\AsseticBundle\Factory\AssetFactory($this->get('kernel'), '/var/www/SymfonySemdropsMobile/app/../web', true);
+        $this->services['assetic.asset_factory'] = $instance = new \Symfony\Bundle\AsseticBundle\Factory\AssetFactory($this->get('kernel'), $this, new \Symfony\Component\DependencyInjection\ParameterBag\ParameterBag($this->getDefaultParameters()), '/var/www/symfony_yukakami/app/../web', true);
 
-        $instance->setFilterManager($this->get('assetic.filter_manager'));
         $instance->addWorker(new \Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker());
 
         return $instance;
@@ -1947,7 +1833,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_CacheService()
     {
-        return $this->services['assetic.cache'] = new \Assetic\Cache\FilesystemCache('/var/www/SymfonySemdropsMobile/app/cache/dev/assetic/assets');
+        return $this->services['assetic.cache'] = new \Assetic\Cache\FilesystemCache('/var/www/symfony_yukakami/app/cache/dev/assetic/assets');
     }
 
     /**
@@ -1964,164 +1850,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getControllerNameConverterService()
     {
-        return $this->services['controller_name_converter'] = new \Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser($this->get('kernel'), $this->get('monolog.logger.request'));
-    }
-
-    /**
-     * Gets the 'data_collector.config' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector A Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector instance.
-     */
-    protected function getDataCollector_ConfigService()
-    {
-        return $this->services['data_collector.config'] = new \Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector($this->get('kernel'));
-    }
-
-    /**
-     * Gets the 'data_collector.doctrine' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector A Symfony\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector instance.
-     */
-    protected function getDataCollector_DoctrineService()
-    {
-        return $this->services['data_collector.doctrine'] = new \Symfony\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector($this->get('doctrine.dbal.logger'));
-    }
-
-    /**
-     * Gets the 'data_collector.events' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\DataCollector\EventDataCollector A Symfony\Component\HttpKernel\DataCollector\EventDataCollector instance.
-     */
-    protected function getDataCollector_EventsService()
-    {
-        $this->services['data_collector.events'] = $instance = new \Symfony\Component\HttpKernel\DataCollector\EventDataCollector();
-
-        $instance->setEventDispatcher($this->get('event_dispatcher'));
-
-        return $instance;
-    }
-
-    /**
-     * Gets the 'data_collector.exception' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector A Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector instance.
-     */
-    protected function getDataCollector_ExceptionService()
-    {
-        return $this->services['data_collector.exception'] = new \Symfony\Component\HttpKernel\DataCollector\ExceptionDataCollector();
-    }
-
-    /**
-     * Gets the 'data_collector.logger' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector A Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector instance.
-     */
-    protected function getDataCollector_LoggerService()
-    {
-        return $this->services['data_collector.logger'] = new \Symfony\Component\HttpKernel\DataCollector\LoggerDataCollector($this->get('monolog.logger.profiler'));
-    }
-
-    /**
-     * Gets the 'data_collector.memory' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector A Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector instance.
-     */
-    protected function getDataCollector_MemoryService()
-    {
-        return $this->services['data_collector.memory'] = new \Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector();
-    }
-
-    /**
-     * Gets the 'data_collector.request' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector A Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector instance.
-     */
-    protected function getDataCollector_RequestService()
-    {
-        return $this->services['data_collector.request'] = new \Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector();
-    }
-
-    /**
-     * Gets the 'data_collector.security' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector A Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector instance.
-     */
-    protected function getDataCollector_SecurityService()
-    {
-        return $this->services['data_collector.security'] = new \Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector($this->get('security.context'));
-    }
-
-    /**
-     * Gets the 'data_collector.timer' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Bundle\FrameworkBundle\DataCollector\TimerDataCollector A Symfony\Bundle\FrameworkBundle\DataCollector\TimerDataCollector instance.
-     */
-    protected function getDataCollector_TimerService()
-    {
-        return $this->services['data_collector.timer'] = new \Symfony\Bundle\FrameworkBundle\DataCollector\TimerDataCollector($this->get('kernel'));
+        return $this->services['controller_name_converter'] = new \Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser($this->get('kernel'));
     }
 
     /**
@@ -2134,28 +1863,11 @@ class appDevDebugProjectContainer extends Container
      * If you want to be able to request this service from the container directly,
      * make it public, otherwise you might end up with broken code.
      *
-     * @return Symfony\Bundle\DoctrineBundle\Logger\DbalLogger A Symfony\Bundle\DoctrineBundle\Logger\DbalLogger instance.
+     * @return Symfony\Bridge\Doctrine\Logger\DbalLogger A Symfony\Bridge\Doctrine\Logger\DbalLogger instance.
      */
     protected function getDoctrine_Dbal_LoggerService()
     {
-        return $this->services['doctrine.dbal.logger'] = new \Symfony\Bundle\DoctrineBundle\Logger\DbalLogger($this->get('monolog.logger.doctrine'));
-    }
-
-    /**
-     * Gets the 'profiler.storage' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage A Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage instance.
-     */
-    protected function getProfiler_StorageService()
-    {
-        return $this->services['profiler.storage'] = new \Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage('sqlite:/var/www/SymfonySemdropsMobile/app/cache/dev/profiler.db', '', '', 86400);
+        return $this->services['doctrine.dbal.logger'] = new \Symfony\Bridge\Doctrine\Logger\DbalLogger($this->get('monolog.logger.doctrine'));
     }
 
     /**
@@ -2189,7 +1901,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        return $this->services['security.authentication.manager'] = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.in_memory'), new \Symfony\Component\Security\Core\User\UserChecker(), 'secured_area', $this->get('security.encoder_factory'))));
+        return $this->services['security.authentication.manager'] = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.in_memory'), new \Symfony\Component\Security\Core\User\UserChecker(), 'secured_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('4e4c19155e418')));
     }
 
     /**
@@ -2232,7 +1944,7 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'swiftmailer.data_collector' service.
+     * Gets the 'templating.locator' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
@@ -2241,28 +1953,11 @@ class appDevDebugProjectContainer extends Container
      * If you want to be able to request this service from the container directly,
      * make it public, otherwise you might end up with broken code.
      *
-     * @return Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector A Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector instance.
+     * @return Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator A Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator instance.
      */
-    protected function getSwiftmailer_DataCollectorService()
+    protected function getTemplating_LocatorService()
     {
-        return $this->services['swiftmailer.data_collector'] = new \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector($this->get('swiftmailer.plugin.messagelogger'), $this->get('mailer'));
-    }
-
-    /**
-     * Gets the 'swiftmailer.plugin.messagelogger' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger A Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger instance.
-     */
-    protected function getSwiftmailer_Plugin_MessageloggerService()
-    {
-        return $this->services['swiftmailer.plugin.messagelogger'] = new \Symfony\Bundle\SwiftmailerBundle\Logger\MessageLogger();
+        return $this->services['templating.locator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator($this->get('file_locator'), '/var/www/symfony_yukakami/app/cache/dev');
     }
 
     /**
@@ -2283,23 +1978,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'twig.extension.acme.demo' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Acme\DemoBundle\Twig\Extension\DemoExtension A Acme\DemoBundle\Twig\Extension\DemoExtension instance.
-     */
-    protected function getTwig_Extension_Acme_DemoService()
-    {
-        return $this->services['twig.extension.acme.demo'] = new \Acme\DemoBundle\Twig\Extension\DemoExtension($this->get('twig.loader'));
-    }
-
-    /**
      * Gets the 'validator.mapping.class_metadata_factory' service.
      *
      * This service is shared.
@@ -2313,7 +1991,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getValidator_Mapping_ClassMetadataFactoryService()
     {
-        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader(array('assert' => 'Symfony\\Component\\Validator\\Constraints\\')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/var/www/SymfonySemdropsMobile/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/../../../Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
+        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/../../../Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
     }
 
     /**
@@ -2353,12 +2031,12 @@ class appDevDebugProjectContainer extends Container
     protected function getDefaultParameters()
     {
         return array(
-            'kernel.root_dir' => '/var/www/SymfonySemdropsMobile/app',
+            'kernel.root_dir' => '/var/www/symfony_yukakami/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
             'kernel.name' => 'app',
-            'kernel.cache_dir' => '/var/www/SymfonySemdropsMobile/app/cache/dev',
-            'kernel.logs_dir' => '/var/www/SymfonySemdropsMobile/app/logs',
+            'kernel.cache_dir' => '/var/www/symfony_yukakami/app/cache/dev',
+            'kernel.logs_dir' => '/var/www/symfony_yukakami/app/logs',
             'kernel.bundles' => array(
                 'FrameworkBundle' => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle',
                 'SecurityBundle' => 'Symfony\\Bundle\\SecurityBundle\\SecurityBundle',
@@ -2369,10 +2047,10 @@ class appDevDebugProjectContainer extends Container
                 'AsseticBundle' => 'Symfony\\Bundle\\AsseticBundle\\AsseticBundle',
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'JMSSecurityExtraBundle' => 'JMS\\SecurityExtraBundle\\JMSSecurityExtraBundle',
-                'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'SemdropsSemdropsMobileBundle' => 'Semdrops\\SemdropsMobileBundle\\SemdropsSemdropsMobileBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
-                'SymfonyWebConfiguratorBundle' => 'Symfony\\Bundle\\WebConfiguratorBundle\\SymfonyWebConfiguratorBundle',
+                'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
+                'SensioGeneratorBundle' => 'Sensio\\Bundle\\GeneratorBundle\\SensioGeneratorBundle',
             ),
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => 'appDevDebugProjectContainer',
@@ -2387,19 +2065,14 @@ class appDevDebugProjectContainer extends Container
             'mailer_password' => '',
             'locale' => 'en',
             'secret' => 'ThisTokenIsNotSoSecretChangeIt',
-            'request_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\RequestListener',
+            'router_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\RouterListener',
+            'session_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\SessionListener',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
-            'response_listener.class' => 'Symfony\\Component\\HttpKernel\\ResponseListener',
-            'exception_listener.class' => 'Symfony\\Component\\HttpKernel\\Debug\\ExceptionListener',
-            'form.extension.class' => 'Symfony\\Component\\Form\\Extension\\DependencyInjection\\DependencyInjectionExtension',
-            'form.factory.class' => 'Symfony\\Component\\Form\\FormFactory',
-            'form.type_guesser.validator.class' => 'Symfony\\Component\\Form\\Extension\\Validator\\ValidatorTypeGuesser',
-            'form.csrf_provider.class' => 'Symfony\\Component\\Form\\Extension\\Csrf\\CsrfProvider\\SessionCsrfProvider',
-            'file.temporary_storage.class' => 'Symfony\\Component\\HttpFoundation\\File\\SessionBasedTemporaryStorage',
+            'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
+            'exception_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ExceptionListener',
             'event_dispatcher.class' => 'Symfony\\Bundle\\FrameworkBundle\\ContainerAwareEventDispatcher',
             'http_kernel.class' => 'Symfony\\Bundle\\FrameworkBundle\\HttpKernel',
-            'error_handler.class' => 'Symfony\\Component\\HttpKernel\\Debug\\ErrorHandler',
             'filesystem.class' => 'Symfony\\Component\\HttpKernel\\Util\\Filesystem',
             'cache_warmer.class' => 'Symfony\\Component\\HttpKernel\\CacheWarmer\\CacheWarmerAggregate',
             'file_locator.class' => 'Symfony\\Component\\HttpKernel\\Config\\FileLocator',
@@ -2410,10 +2083,40 @@ class appDevDebugProjectContainer extends Container
             'translation.loader.yml.class' => 'Symfony\\Component\\Translation\\Loader\\YamlFileLoader',
             'translation.loader.xliff.class' => 'Symfony\\Component\\Translation\\Loader\\XliffFileLoader',
             'debug.event_dispatcher.class' => 'Symfony\\Bundle\\FrameworkBundle\\Debug\\TraceableEventDispatcher',
-            'kernel.cache_warmup' => false,
+            'debug.container.dump' => '/var/www/symfony_yukakami/app/cache/dev/appDevDebugProjectContainer.xml',
             'kernel.secret' => 'ThisTokenIsNotSoSecretChangeIt',
+            'exception_listener.controller' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ExceptionController::showAction',
+            'session.class' => 'Symfony\\Component\\HttpFoundation\\Session',
+            'session.storage.native.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
+            'session.storage.filesystem.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\FilesystemSessionStorage',
+            'session.default_locale' => 'en',
+            'session.storage.options' => array(
+
+            ),
+            'form.extension.class' => 'Symfony\\Component\\Form\\Extension\\DependencyInjection\\DependencyInjectionExtension',
+            'form.factory.class' => 'Symfony\\Component\\Form\\FormFactory',
+            'form.type_guesser.validator.class' => 'Symfony\\Component\\Form\\Extension\\Validator\\ValidatorTypeGuesser',
+            'form.csrf_provider.class' => 'Symfony\\Component\\Form\\Extension\\Csrf\\CsrfProvider\\SessionCsrfProvider',
+            'form.type_extension.csrf.enabled' => true,
+            'form.type_extension.csrf.field_name' => '_token',
+            'validator.class' => 'Symfony\\Component\\Validator\\Validator',
+            'validator.mapping.class_metadata_factory.class' => 'Symfony\\Component\\Validator\\Mapping\\ClassMetadataFactory',
+            'validator.mapping.cache.apc.class' => 'Symfony\\Component\\Validator\\Mapping\\Cache\\ApcCache',
+            'validator.mapping.cache.prefix' => '',
+            'validator.mapping.loader.loader_chain.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\LoaderChain',
+            'validator.mapping.loader.static_method_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\StaticMethodLoader',
+            'validator.mapping.loader.annotation_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\AnnotationLoader',
+            'validator.mapping.loader.xml_files_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\XmlFilesLoader',
+            'validator.mapping.loader.yaml_files_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\YamlFilesLoader',
+            'validator.validator_factory.class' => 'Symfony\\Bundle\\FrameworkBundle\\Validator\\ConstraintValidatorFactory',
+            'validator.mapping.loader.xml_files_loader.mapping_files' => array(
+                0 => '/var/www/symfony_yukakami/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/../../../Component/Form/Resources/config/validation.xml',
+            ),
+            'validator.mapping.loader.yaml_files_loader.mapping_files' => array(
+
+            ),
             'profiler.class' => 'Symfony\\Component\\HttpKernel\\Profiler\\Profiler',
-            'profiler_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\Profiler\\ProfilerListener',
+            'profiler_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ProfilerListener',
             'data_collector.config.class' => 'Symfony\\Component\\HttpKernel\\DataCollector\\ConfigDataCollector',
             'data_collector.request.class' => 'Symfony\\Bundle\\FrameworkBundle\\DataCollector\\RequestDataCollector',
             'data_collector.exception.class' => 'Symfony\\Component\\HttpKernel\\DataCollector\\ExceptionDataCollector',
@@ -2421,8 +2124,13 @@ class appDevDebugProjectContainer extends Container
             'data_collector.logger.class' => 'Symfony\\Component\\HttpKernel\\DataCollector\\LoggerDataCollector',
             'data_collector.timer.class' => 'Symfony\\Bundle\\FrameworkBundle\\DataCollector\\TimerDataCollector',
             'data_collector.memory.class' => 'Symfony\\Component\\HttpKernel\\DataCollector\\MemoryDataCollector',
-            'router.class' => 'Symfony\\Component\\Routing\\Router',
-            'router.cached.class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\CachedRouter',
+            'profiler_listener.only_exceptions' => false,
+            'profiler_listener.only_master_requests' => false,
+            'profiler.storage.dsn' => 'sqlite:/var/www/symfony_yukakami/app/cache/dev/profiler.db',
+            'profiler.storage.username' => '',
+            'profiler.storage.password' => '',
+            'profiler.storage.lifetime' => 86400,
+            'router.class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\Router',
             'routing.loader.class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\DelegatingLoader',
             'routing.resolver.class' => 'Symfony\\Component\\Config\\Loader\\LoaderResolver',
             'routing.loader.xml.class' => 'Symfony\\Component\\Routing\\Loader\\XmlFileLoader',
@@ -2435,26 +2143,22 @@ class appDevDebugProjectContainer extends Container
             'router.options.matcher_base_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher',
             'router.options.matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper',
             'router.cache_warmer.class' => 'Symfony\\Bundle\\FrameworkBundle\\CacheWarmer\\RouterCacheWarmer',
-            'router.options.matcher.cache_class' => 'appdevUrlMatcher',
-            'router.options.generator.cache_class' => 'appdevUrlGenerator',
-            'session.class' => 'Symfony\\Component\\HttpFoundation\\Session',
-            'session.storage.native.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
-            'session.storage.filesystem.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\FilesystemSessionStorage',
-            'session.storage.options' => array(
-                'lifetime' => 3600,
-            ),
+            'router.options.matcher.cache_class' => 'app%kernel.environment%UrlMatcher',
+            'router.options.generator.cache_class' => 'app%kernel.environment%UrlGenerator',
+            'router.resource' => '/var/www/symfony_yukakami/app/config/routing_dev.yml',
+            'request_listener.http_port' => 80,
+            'request_listener.https_port' => 443,
             'templating.engine.delegating.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\DelegatingEngine',
             'templating.name_parser.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\TemplateNameParser',
             'templating.cache_warmer.template_paths.class' => 'Symfony\\Bundle\\FrameworkBundle\\CacheWarmer\\TemplatePathsCacheWarmer',
             'templating.locator.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\TemplateLocator',
-            'templating.locator.cached.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\CachedTemplateLocator',
             'templating.loader.filesystem.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\FilesystemLoader',
             'templating.loader.cache.class' => 'Symfony\\Component\\Templating\\Loader\\CacheLoader',
             'templating.loader.chain.class' => 'Symfony\\Component\\Templating\\Loader\\ChainLoader',
-            'templating.finder.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\TemplateFinder',
+            'templating.finder.class' => 'Symfony\\Bundle\\FrameworkBundle\\CacheWarmer\\TemplateFinder',
             'templating.engine.php.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\PhpEngine',
             'templating.helper.slots.class' => 'Symfony\\Component\\Templating\\Helper\\SlotsHelper',
-            'templating.helper.assets.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\AssetsHelper',
+            'templating.helper.assets.class' => 'Symfony\\Component\\Templating\\Helper\\CoreAssetsHelper',
             'templating.helper.actions.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\ActionsHelper',
             'templating.helper.router.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\RouterHelper',
             'templating.helper.request.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\RequestHelper',
@@ -2463,21 +2167,21 @@ class appDevDebugProjectContainer extends Container
             'templating.helper.translator.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\TranslatorHelper',
             'templating.helper.form.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\FormHelper',
             'templating.globals.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\GlobalVariables',
-            'templating.asset_package.class' => 'Symfony\\Component\\Templating\\Asset\\AssetPackage',
+            'templating.asset.path_package.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Asset\\PathPackage',
+            'templating.asset.url_package.class' => 'Symfony\\Component\\Templating\\Asset\\UrlPackage',
+            'templating.asset.package_factory.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Asset\\PackageFactory',
+            'templating.helper.code.file_link_format' => '',
+            'templating.helper.form.resources' => array(
+                0 => 'FrameworkBundle:Form',
+            ),
             'templating.debugger.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Debugger',
+            'templating.loader.cache.path' => NULL,
             'templating.engines' => array(
                 0 => 'twig',
             ),
-            'validator.class' => 'Symfony\\Component\\Validator\\Validator',
-            'validator.mapping.class_metadata_factory.class' => 'Symfony\\Component\\Validator\\Mapping\\ClassMetadataFactory',
-            'validator.mapping.cache.apc.class' => 'Symfony\\Component\\Validator\\Mapping\\Cache\\ApcCache',
-            'validator.mapping.cache.prefix' => '',
-            'validator.mapping.loader.loader_chain.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\LoaderChain',
-            'validator.mapping.loader.static_method_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\StaticMethodLoader',
-            'validator.mapping.loader.annotation_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\AnnotationLoader',
-            'validator.mapping.loader.xml_files_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\XmlFilesLoader',
-            'validator.mapping.loader.yaml_files_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\YamlFilesLoader',
-            'validator.validator_factory.class' => 'Symfony\\Bundle\\FrameworkBundle\\Validator\\ConstraintValidatorFactory',
+            'annotations.reader.class' => 'Doctrine\\Common\\Annotations\\AnnotationReader',
+            'annotations.cached_reader.class' => 'Doctrine\\Common\\Annotations\\CachedReader',
+            'annotations.file_cache_reader.class' => 'Doctrine\\Common\\Annotations\\FileCacheReader',
             'security.context.class' => 'Symfony\\Component\\Security\\Core\\SecurityContext',
             'security.user_checker.class' => 'Symfony\\Component\\Security\\Core\\User\\UserChecker',
             'security.encoder_factory.generic.class' => 'Symfony\\Component\\Security\\Core\\Encoder\\EncoderFactory',
@@ -2501,6 +2205,7 @@ class appDevDebugProjectContainer extends Container
             'security.firewall.context.class' => 'Symfony\\Bundle\\SecurityBundle\\Security\\FirewallContext',
             'security.matcher.class' => 'Symfony\\Component\\HttpFoundation\\RequestMatcher',
             'security.role_hierarchy.class' => 'Symfony\\Component\\Security\\Core\\Role\\RoleHierarchy',
+            'security.http_utils.class' => 'Symfony\\Component\\Security\\Http\\HttpUtils',
             'security.authentication.retry_entry_point.class' => 'Symfony\\Component\\Security\\Http\\EntryPoint\\RetryAuthenticationEntryPoint',
             'security.channel_listener.class' => 'Symfony\\Component\\Security\\Http\\Firewall\\ChannelListener',
             'security.authentication.form_entry_point.class' => 'Symfony\\Component\\Security\\Http\\EntryPoint\\FormAuthenticationEntryPoint',
@@ -2527,11 +2232,13 @@ class appDevDebugProjectContainer extends Container
             'security.rememberme.token.provider.in_memory.class' => 'Symfony\\Component\\Security\\Core\\Authentication\\RememberMe\\InMemoryTokenProvider',
             'security.authentication.rememberme.services.persistent.class' => 'Symfony\\Component\\Security\\Http\\RememberMe\\PersistentTokenBasedRememberMeServices',
             'security.authentication.rememberme.services.simplehash.class' => 'Symfony\\Component\\Security\\Http\\RememberMe\\TokenBasedRememberMeServices',
-            'security.rememberme.response_listener.class' => 'Symfony\\Bundle\\SecurityBundle\\ResponseListener',
+            'security.rememberme.response_listener.class' => 'Symfony\\Bundle\\SecurityBundle\\EventListener\\ResponseListener',
             'templating.helper.security.class' => 'Symfony\\Bundle\\SecurityBundle\\Templating\\Helper\\SecurityHelper',
             'data_collector.security.class' => 'Symfony\\Bundle\\SecurityBundle\\DataCollector\\SecurityDataCollector',
             'security.access.denied_url' => NULL,
+            'security.authentication.session_strategy.strategy' => 'migrate',
             'security.access.always_authenticate_before_granting' => false,
+            'security.authentication.hide_user_not_found' => true,
             'security.role_hierarchy.roles' => array(
                 'ROLE_ADMIN' => array(
                     0 => 'ROLE_USER',
@@ -2546,57 +2253,75 @@ class appDevDebugProjectContainer extends Container
             'twig.loader.class' => 'Symfony\\Bundle\\TwigBundle\\Loader\\FilesystemLoader',
             'templating.engine.twig.class' => 'Symfony\\Bundle\\TwigBundle\\TwigEngine',
             'twig.cache_warmer.class' => 'Symfony\\Bundle\\TwigBundle\\CacheWarmer\\TemplateCacheCacheWarmer',
+            'twig.extension.trans.class' => 'Symfony\\Bridge\\Twig\\Extension\\TranslationExtension',
+            'twig.extension.assets.class' => 'Symfony\\Bundle\\TwigBundle\\Extension\\AssetsExtension',
+            'twig.extension.actions.class' => 'Symfony\\Bundle\\TwigBundle\\Extension\\ActionsExtension',
+            'twig.extension.code.class' => 'Symfony\\Bundle\\TwigBundle\\Extension\\CodeExtension',
+            'twig.extension.routing.class' => 'Symfony\\Bridge\\Twig\\Extension\\RoutingExtension',
+            'twig.extension.yaml.class' => 'Symfony\\Bridge\\Twig\\Extension\\YamlExtension',
+            'twig.extension.form.class' => 'Symfony\\Bridge\\Twig\\Extension\\FormExtension',
             'twig.form.resources' => array(
-                0 => 'TwigBundle:Form:div_layout.html.twig',
+                0 => 'form_div_layout.html.twig',
             ),
             'twig.options' => array(
                 'debug' => true,
                 'strict_variables' => true,
-                'cache' => '/var/www/SymfonySemdropsMobile/app/cache/dev/twig',
+                'cache' => '/var/www/symfony_yukakami/app/cache/dev/twig',
                 'charset' => 'UTF-8',
             ),
-            'monolog.logger.class' => 'Symfony\\Bundle\\MonologBundle\\Logger\\Logger',
+            'monolog.logger.class' => 'Symfony\\Bridge\\Monolog\\Logger',
             'monolog.handler.stream.class' => 'Monolog\\Handler\\StreamHandler',
             'monolog.handler.fingers_crossed.class' => 'Monolog\\Handler\\FingersCrossedHandler',
+            'monolog.handler.group.class' => 'Monolog\\Handler\\GroupHandler',
             'monolog.handler.buffer.class' => 'Monolog\\Handler\\BufferHandler',
             'monolog.handler.rotating_file.class' => 'Monolog\\Handler\\RotatingFileHandler',
             'monolog.handler.syslog.class' => 'Monolog\\Handler\\SyslogHandler',
             'monolog.handler.null.class' => 'Monolog\\Handler\\NullHandler',
             'monolog.handler.test.class' => 'Monolog\\Handler\\TestHandler',
-            'monolog.handler.firephp.class' => 'Symfony\\Bundle\\MonologBundle\\Logger\\FirePHPHandler',
-            'monolog.handler.debug.class' => 'Symfony\\Bundle\\MonologBundle\\Logger\\DebugHandler',
+            'monolog.handler.firephp.class' => 'Symfony\\Bridge\\Monolog\\Handler\\FirePHPHandler',
+            'monolog.handler.debug.class' => 'Symfony\\Bridge\\Monolog\\Handler\\DebugHandler',
+            'monolog.handler.swift_mailer.class' => 'Monolog\\Handler\\SwiftMailerHandler',
+            'monolog.handler.native_mailer.class' => 'Monolog\\Handler\\NativeMailerHandler',
             'swiftmailer.class' => 'Swift_Mailer',
             'swiftmailer.transport.sendmail.class' => 'Swift_Transport_SendmailTransport',
             'swiftmailer.transport.mail.class' => 'Swift_Transport_MailTransport',
             'swiftmailer.transport.failover.class' => 'Swift_Transport_FailoverTransport',
             'swiftmailer.plugin.redirecting.class' => 'Swift_Plugins_RedirectingPlugin',
-            'swiftmailer.plugin.blackhole.class' => 'Swift_Plugins_BlackholePlugin',
+            'swiftmailer.plugin.impersonate.class' => 'Swift_Plugins_ImpersonatePlugin',
             'swiftmailer.plugin.messagelogger.class' => 'Symfony\\Bundle\\SwiftmailerBundle\\Logger\\MessageLogger',
+            'swiftmailer.plugin.antiflood.class' => 'Swift_Plugins_AntiFloodPlugin',
+            'swiftmailer.plugin.antiflood.threshold' => 99,
+            'swiftmailer.plugin.antiflood.sleep' => 0,
             'swiftmailer.data_collector.class' => 'Symfony\\Bundle\\SwiftmailerBundle\\DataCollector\\MessageDataCollector',
             'swiftmailer.transport.smtp.class' => 'Swift_Transport_EsmtpTransport',
-            'swiftmailer.transport.name' => 'smtp',
             'swiftmailer.transport.smtp.encryption' => NULL,
             'swiftmailer.transport.smtp.port' => 25,
             'swiftmailer.transport.smtp.host' => 'localhost',
             'swiftmailer.transport.smtp.username' => '',
             'swiftmailer.transport.smtp.password' => '',
             'swiftmailer.transport.smtp.auth_mode' => NULL,
+            'swiftmailer.spool.enabled' => false,
+            'swiftmailer.sender_address' => NULL,
             'swiftmailer.single_address' => NULL,
-            'doctrine.dbal.default_connection' => 'default',
             'doctrine.dbal.connection.class' => 'Doctrine\\DBAL\\Connection',
             'doctrine.dbal.logger.debug.class' => 'Doctrine\\DBAL\\Logging\\DebugStack',
-            'doctrine.dbal.logger.class' => 'Symfony\\Bundle\\DoctrineBundle\\Logger\\DbalLogger',
+            'doctrine.dbal.logger.class' => 'Symfony\\Bridge\\Doctrine\\Logger\\DbalLogger',
             'doctrine.dbal.configuration.class' => 'Doctrine\\DBAL\\Configuration',
-            'doctrine.data_collector.class' => 'Symfony\\Bundle\\DoctrineBundle\\DataCollector\\DoctrineDataCollector',
+            'doctrine.data_collector.class' => 'Symfony\\Bridge\\Doctrine\\DataCollector\\DoctrineDataCollector',
             'doctrine.dbal.connection.event_manager.class' => 'Doctrine\\Common\\EventManager',
             'doctrine.dbal.connection_factory.class' => 'Symfony\\Bundle\\DoctrineBundle\\ConnectionFactory',
             'doctrine.dbal.events.mysql_session_init.class' => 'Doctrine\\DBAL\\Event\\Listeners\\MysqlSessionInit',
             'doctrine.dbal.events.oracle_session_init.class' => 'Doctrine\\DBAL\\Event\\Listeners\\OracleSessionInit',
+            'doctrine.class' => 'Symfony\\Bundle\\DoctrineBundle\\Registry',
+            'doctrine.dbal.connection_factory.types' => array(
+
+            ),
+            'doctrine.connections' => array(
+                'default' => 'doctrine.dbal.default_connection',
+            ),
+            'doctrine.default_connection' => 'default',
             'doctrine.orm.configuration.class' => 'Doctrine\\ORM\\Configuration',
             'doctrine.orm.entity_manager.class' => 'Doctrine\\ORM\\EntityManager',
-            'doctrine.orm.entity_managers' => array(
-                0 => 'default',
-            ),
             'doctrine.orm.cache.array.class' => 'Doctrine\\Common\\Cache\\ArrayCache',
             'doctrine.orm.cache.apc.class' => 'Doctrine\\Common\\Cache\\ApcCache',
             'doctrine.orm.cache.memcache.class' => 'Doctrine\\Common\\Cache\\MemcacheCache',
@@ -2606,30 +2331,36 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.cache.xcache.class' => 'Doctrine\\Common\\Cache\\XcacheCache',
             'doctrine.orm.metadata.driver_chain.class' => 'Doctrine\\ORM\\Mapping\\Driver\\DriverChain',
             'doctrine.orm.metadata.annotation.class' => 'Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver',
-            'doctrine.orm.metadata.annotation_reader.class' => 'Doctrine\\Common\\Annotations\\AnnotationReader',
-            'doctrine.orm.metadata.xml.class' => 'Doctrine\\ORM\\Mapping\\Driver\\XmlDriver',
-            'doctrine.orm.metadata.yml.class' => 'Doctrine\\ORM\\Mapping\\Driver\\YamlDriver',
+            'doctrine.orm.metadata.annotation_reader.class' => 'Symfony\\Bridge\\Doctrine\\Annotations\\IndexedReader',
+            'doctrine.orm.metadata.xml.class' => 'Symfony\\Bridge\\Doctrine\\Mapping\\Driver\\XmlDriver',
+            'doctrine.orm.metadata.yml.class' => 'Symfony\\Bridge\\Doctrine\\Mapping\\Driver\\YamlDriver',
             'doctrine.orm.metadata.php.class' => 'Doctrine\\ORM\\Mapping\\Driver\\PHPDriver',
             'doctrine.orm.metadata.staticphp.class' => 'Doctrine\\ORM\\Mapping\\Driver\\StaticPHPDriver',
-            'doctrine.orm.class_metadata_factory_name' => 'Doctrine\\ORM\\Mapping\\ClassMetadataFactory',
-            'doctrine.orm.proxy_cache_warmer.class' => 'Symfony\\Bundle\\DoctrineBundle\\CacheWarmer\\ProxyCacheWarmer',
+            'doctrine.orm.proxy_cache_warmer.class' => 'Symfony\\Bridge\\Doctrine\\CacheWarmer\\ProxyCacheWarmer',
             'form.type_guesser.doctrine.class' => 'Symfony\\Bridge\\Doctrine\\Form\\DoctrineOrmTypeGuesser',
-            'doctrine.orm.default_entity_manager' => 'default',
+            'doctrine.orm.validator.unique.class' => 'Symfony\\Bridge\\Doctrine\\Validator\\Constraints\\UniqueEntityValidator',
+            'doctrine.entity_managers' => array(
+                'default' => 'doctrine.orm.default_entity_manager',
+            ),
+            'doctrine.default_entity_manager' => 'default',
             'doctrine.orm.auto_generate_proxy_classes' => true,
-            'doctrine.orm.proxy_dir' => '/var/www/SymfonySemdropsMobile/app/cache/dev/doctrine/orm/Proxies',
+            'doctrine.orm.proxy_dir' => '/var/www/symfony_yukakami/app/cache/dev/doctrine/orm/Proxies',
             'doctrine.orm.proxy_namespace' => 'Proxies',
             'assetic.asset_factory.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\AssetFactory',
             'assetic.asset_manager.class' => 'Assetic\\Factory\\LazyAssetManager',
             'assetic.asset_manager_cache_warmer.class' => 'Symfony\\Bundle\\AsseticBundle\\CacheWarmer\\AssetManagerCacheWarmer',
             'assetic.cached_formula_loader.class' => 'Assetic\\Factory\\Loader\\CachedFormulaLoader',
             'assetic.config_cache.class' => 'Assetic\\Cache\\ConfigCache',
-            'assetic.coalescing_directory_resource.class' => 'Assetic\\Factory\\Resource\\CoalescingDirectoryResource',
+            'assetic.config_loader.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Loader\\ConfigurationLoader',
+            'assetic.config_resource.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Resource\\ConfigurationResource',
+            'assetic.coalescing_directory_resource.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Resource\\CoalescingDirectoryResource',
             'assetic.directory_resource.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Resource\\DirectoryResource',
             'assetic.filter_manager.class' => 'Symfony\\Bundle\\AsseticBundle\\FilterManager',
+            'assetic.worker.ensure_filter.class' => 'Assetic\\Factory\\Worker\\EnsureFilterWorker',
             'assetic.node.paths' => array(
 
             ),
-            'assetic.cache_dir' => '/var/www/SymfonySemdropsMobile/app/cache/dev/assetic',
+            'assetic.cache_dir' => '/var/www/symfony_yukakami/app/cache/dev/assetic',
             'assetic.twig_extension.class' => 'Symfony\\Bundle\\AsseticBundle\\Twig\\AsseticExtension',
             'assetic.twig_formula_loader.class' => 'Assetic\\Extension\\Twig\\TwigFormulaLoader',
             'assetic.helper.dynamic.class' => 'Symfony\\Bundle\\AsseticBundle\\Templating\\DynamicAsseticHelper',
@@ -2637,29 +2368,28 @@ class appDevDebugProjectContainer extends Container
             'assetic.php_formula_loader.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Loader\\AsseticHelperFormulaLoader',
             'assetic.debug' => true,
             'assetic.use_controller' => true,
-            'assetic.read_from' => '/var/www/SymfonySemdropsMobile/app/../web',
-            'assetic.write_to' => '/var/www/SymfonySemdropsMobile/app/../web',
+            'assetic.read_from' => '/var/www/symfony_yukakami/app/../web',
+            'assetic.write_to' => '/var/www/symfony_yukakami/app/../web',
             'assetic.java.bin' => '/usr/bin/java',
             'assetic.node.bin' => '/usr/bin/node',
             'assetic.sass.bin' => '/usr/bin/sass',
             'assetic.filter.cssrewrite.class' => 'Assetic\\Filter\\CssRewriteFilter',
+            'assetic.twig_extension.functions' => array(
+
+            ),
             'assetic.controller.class' => 'Symfony\\Bundle\\AsseticBundle\\Controller\\AsseticController',
             'assetic.routing_loader.class' => 'Symfony\\Bundle\\AsseticBundle\\Routing\\AsseticLoader',
             'assetic.cache.class' => 'Assetic\\Cache\\FilesystemCache',
             'assetic.use_controller_worker.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\Worker\\UseControllerWorker',
-            'assetic.request_listener.class' => 'Symfony\\Bundle\\AsseticBundle\\Listener\\RequestListener',
-            'annotations.reader.class' => 'Doctrine\\Common\\Annotations\\AnnotationReader',
-            'annotations.configuration_reader.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\AnnotationReader',
-            'annotations.parser.class' => 'Doctrine\\Common\\Annotations\\Parser',
-            'annotations.controller_parser.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Controller\\ControllerAnnotationParser',
-            'routing.loader.annot_glob.class' => 'Symfony\\Component\\Routing\\Loader\\AnnotationGlobLoader',
-            'routing.loader.annot_dir.class' => 'Symfony\\Component\\Routing\\Loader\\AnnotationDirectoryLoader',
-            'routing.loader.annot_file.class' => 'Symfony\\Component\\Routing\\Loader\\AnnotationFileLoader',
-            'routing.loader.annot_class.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Routing\\AnnotatedRouteControllerLoader',
-            'converter.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Controller\\ParamConverterListener',
-            'converter.manager.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
-            'converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
-            'view.template_annotation.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\View\\AnnotationTemplateListener',
+            'assetic.request_listener.class' => 'Symfony\\Bundle\\AsseticBundle\\EventListener\\RequestListener',
+            'sensio_framework_extra.controller.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
+            'sensio_framework_extra.routing.loader.annot_dir.class' => 'Symfony\\Component\\Routing\\Loader\\AnnotationDirectoryLoader',
+            'sensio_framework_extra.routing.loader.annot_file.class' => 'Symfony\\Component\\Routing\\Loader\\AnnotationFileLoader',
+            'sensio_framework_extra.routing.loader.annot_class.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Routing\\AnnotatedRouteControllerLoader',
+            'sensio_framework_extra.converter.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
+            'sensio_framework_extra.converter.manager.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
+            'sensio_framework_extra.converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
+            'sensio_framework_extra.view.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
             'security.secured_services' => array(
 
             ),
@@ -2673,8 +2403,10 @@ class appDevDebugProjectContainer extends Container
             'security.extra.controller_listener.class' => 'JMS\\SecurityExtraBundle\\Controller\\ControllerListener',
             'security.access.iddqd_voter.class' => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Voter\\IddqdVoter',
             'security.extra.secure_all_services' => false,
-            'web_profiler.debug.toolbar.class' => 'Symfony\\Bundle\\WebProfilerBundle\\WebDebugToolbarListener',
-            'symfony.webconfigurator.class' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Configurator',
+            'web_profiler.debug_toolbar.class' => 'Symfony\\Bundle\\WebProfilerBundle\\EventListener\\WebDebugToolbarListener',
+            'web_profiler.debug_toolbar.intercept_redirects' => false,
+            'web_profiler.debug_toolbar.mode' => 2,
+            'sensio.distribution.webconfigurator.class' => 'Sensio\\Bundle\\DistributionBundle\\Configurator\\Configurator',
             'data_collector.templates' => array(
                 'data_collector.config' => array(
                     0 => 'config',
@@ -2718,87 +2450,89 @@ class appDevDebugProjectContainer extends Container
                 ),
             ),
             'kernel.compiled_classes' => array(
-                0 => 'Symfony\\Component\\Routing\\RouterInterface',
-                1 => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcherInterface',
-                2 => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
-                3 => 'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
-                4 => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-                5 => 'Symfony\\Component\\Routing\\Router',
-                6 => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\SessionStorageInterface',
-                7 => 'Symfony\\Component\\HttpFoundation\\Session',
-                8 => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
-                9 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface',
-                10 => 'Symfony\\Component\\Templating\\TemplateNameParserInterface',
-                11 => 'Symfony\\Component\\Templating\\TemplateNameParser',
-                12 => 'Symfony\\Component\\Templating\\EngineInterface',
-                13 => 'Symfony\\Component\\Config\\FileLocatorInterface',
-                14 => 'Symfony\\Component\\Templating\\TemplateReferenceInterface',
-                15 => 'Symfony\\Component\\Templating\\TemplateReference',
-                16 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\TemplateReference',
-                17 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\TemplateNameParser',
-                18 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\TemplateLocator',
-                19 => 'Symfony\\Component\\HttpFoundation\\ParameterBag',
-                20 => 'Symfony\\Component\\HttpFoundation\\HeaderBag',
-                21 => 'Symfony\\Component\\HttpFoundation\\Request',
-                22 => 'Symfony\\Component\\HttpFoundation\\Response',
-                23 => 'Symfony\\Component\\HttpFoundation\\ResponseHeaderBag',
-                24 => 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface',
-                25 => 'Symfony\\Component\\EventDispatcher\\EventDispatcher',
-                26 => 'Symfony\\Component\\EventDispatcher\\Event',
-                27 => 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface',
-                28 => 'Symfony\\Component\\HttpKernel\\HttpKernel',
-                29 => 'Symfony\\Component\\HttpKernel\\ResponseListener',
-                30 => 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolver',
-                31 => 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface',
-                32 => 'Symfony\\Component\\HttpKernel\\Event\\KernelEvent',
-                33 => 'Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent',
-                34 => 'Symfony\\Component\\HttpKernel\\Event\\FilterResponseEvent',
-                35 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseEvent',
-                36 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseForControllerResultEvent',
-                37 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent',
-                38 => 'Symfony\\Component\\HttpKernel\\Events',
-                39 => 'Symfony\\Bundle\\FrameworkBundle\\RequestListener',
-                40 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
-                41 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
-                42 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller',
-                43 => 'Symfony\\Bundle\\FrameworkBundle\\ContainerAwareEventDispatcher',
-                44 => 'Symfony\\Component\\Security\\Http\\Firewall',
-                45 => 'Symfony\\Component\\Security\\Http\\FirewallMapInterface',
-                46 => 'Symfony\\Component\\Security\\Core\\SecurityContext',
-                47 => 'Symfony\\Component\\Security\\Core\\SecurityContextInterface',
-                48 => 'Symfony\\Component\\Security\\Core\\User\\UserProviderInterface',
-                49 => 'Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationProviderManager',
-                50 => 'Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationManagerInterface',
-                51 => 'Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManager',
-                52 => 'Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManagerInterface',
-                53 => 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface',
-                54 => 'Symfony\\Bundle\\SecurityBundle\\Security\\FirewallMap',
-                55 => 'Symfony\\Bundle\\SecurityBundle\\Security\\FirewallContext',
-                56 => 'Symfony\\Component\\HttpFoundation\\RequestMatcher',
-                57 => 'Symfony\\Component\\HttpFoundation\\RequestMatcherInterface',
-                58 => 'Twig_Environment',
-                59 => 'Twig_ExtensionInterface',
-                60 => 'Twig_Extension',
-                61 => 'Twig_Extension_Core',
-                62 => 'Twig_Extension_Escaper',
-                63 => 'Twig_Extension_Optimizer',
-                64 => 'Twig_LoaderInterface',
-                65 => 'Twig_Markup',
-                66 => 'Twig_TemplateInterface',
-                67 => 'Twig_Template',
-                68 => 'Monolog\\Formatter\\FormatterInterface',
-                69 => 'Monolog\\Formatter\\LineFormatter',
-                70 => 'Monolog\\Handler\\HandlerInterface',
-                71 => 'Monolog\\Handler\\AbstractHandler',
-                72 => 'Monolog\\Handler\\StreamHandler',
-                73 => 'Monolog\\Handler\\FingersCrossedHandler',
-                74 => 'Monolog\\Logger',
-                75 => 'Symfony\\Bundle\\MonologBundle\\Logger\\Logger',
-                76 => 'Symfony\\Bundle\\MonologBundle\\Logger\\DebugHandler',
-                77 => 'JMS\\SecurityExtraBundle\\Controller\\ControllerListener',
-                78 => 'JMS\\SecurityExtraBundle\\Mapping\\Driver\\AnnotationParser',
-                79 => 'JMS\\SecurityExtraBundle\\Mapping\\Driver\\AnnotationConverter',
-                80 => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Interception\\MethodInvocation',
+                0 => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\SessionListener',
+                1 => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\SessionStorageInterface',
+                2 => 'Symfony\\Component\\HttpFoundation\\Session',
+                3 => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
+                4 => 'Symfony\\Component\\Routing\\RouterInterface',
+                5 => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcherInterface',
+                6 => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
+                7 => 'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
+                8 => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
+                9 => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\Router',
+                10 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface',
+                11 => 'Symfony\\Component\\Templating\\TemplateNameParserInterface',
+                12 => 'Symfony\\Component\\Templating\\TemplateNameParser',
+                13 => 'Symfony\\Component\\Templating\\EngineInterface',
+                14 => 'Symfony\\Component\\Config\\FileLocatorInterface',
+                15 => 'Symfony\\Component\\Templating\\TemplateReferenceInterface',
+                16 => 'Symfony\\Component\\Templating\\TemplateReference',
+                17 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\TemplateReference',
+                18 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\TemplateNameParser',
+                19 => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\Loader\\TemplateLocator',
+                20 => 'Symfony\\Component\\HttpFoundation\\ParameterBag',
+                21 => 'Symfony\\Component\\HttpFoundation\\HeaderBag',
+                22 => 'Symfony\\Component\\HttpFoundation\\Request',
+                23 => 'Symfony\\Component\\HttpFoundation\\Response',
+                24 => 'Symfony\\Component\\HttpFoundation\\ResponseHeaderBag',
+                25 => 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface',
+                26 => 'Symfony\\Component\\EventDispatcher\\EventDispatcher',
+                27 => 'Symfony\\Component\\EventDispatcher\\Event',
+                28 => 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface',
+                29 => 'Symfony\\Component\\HttpKernel\\HttpKernel',
+                30 => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
+                31 => 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolver',
+                32 => 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface',
+                33 => 'Symfony\\Component\\HttpKernel\\Event\\KernelEvent',
+                34 => 'Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent',
+                35 => 'Symfony\\Component\\HttpKernel\\Event\\FilterResponseEvent',
+                36 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseEvent',
+                37 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseForControllerResultEvent',
+                38 => 'Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent',
+                39 => 'Symfony\\Component\\HttpKernel\\KernelEvents',
+                40 => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\RouterListener',
+                41 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
+                42 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
+                43 => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller',
+                44 => 'Symfony\\Bundle\\FrameworkBundle\\ContainerAwareEventDispatcher',
+                45 => 'Symfony\\Component\\Security\\Http\\AccessMap',
+                46 => 'Symfony\\Component\\Security\\Http\\Firewall',
+                47 => 'Symfony\\Component\\Security\\Http\\FirewallMapInterface',
+                48 => 'Symfony\\Component\\Security\\Core\\SecurityContext',
+                49 => 'Symfony\\Component\\Security\\Core\\SecurityContextInterface',
+                50 => 'Symfony\\Component\\Security\\Core\\User\\UserProviderInterface',
+                51 => 'Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationProviderManager',
+                52 => 'Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationManagerInterface',
+                53 => 'Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManager',
+                54 => 'Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManagerInterface',
+                55 => 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface',
+                56 => 'Symfony\\Bundle\\SecurityBundle\\Security\\FirewallMap',
+                57 => 'Symfony\\Bundle\\SecurityBundle\\Security\\FirewallContext',
+                58 => 'Symfony\\Component\\HttpFoundation\\RequestMatcher',
+                59 => 'Symfony\\Component\\HttpFoundation\\RequestMatcherInterface',
+                60 => 'Twig_Environment',
+                61 => 'Twig_ExtensionInterface',
+                62 => 'Twig_Extension',
+                63 => 'Twig_Extension_Core',
+                64 => 'Twig_Extension_Escaper',
+                65 => 'Twig_Extension_Optimizer',
+                66 => 'Twig_LoaderInterface',
+                67 => 'Twig_Markup',
+                68 => 'Twig_TemplateInterface',
+                69 => 'Twig_Template',
+                70 => 'Monolog\\Formatter\\FormatterInterface',
+                71 => 'Monolog\\Formatter\\LineFormatter',
+                72 => 'Monolog\\Handler\\HandlerInterface',
+                73 => 'Monolog\\Handler\\AbstractHandler',
+                74 => 'Monolog\\Handler\\AbstractProcessingHandler',
+                75 => 'Monolog\\Handler\\StreamHandler',
+                76 => 'Monolog\\Handler\\FingersCrossedHandler',
+                77 => 'Monolog\\Logger',
+                78 => 'Symfony\\Bridge\\Monolog\\Logger',
+                79 => 'Symfony\\Bridge\\Monolog\\Handler\\DebugHandler',
+                80 => 'JMS\\SecurityExtraBundle\\Controller\\ControllerListener',
+                81 => 'JMS\\SecurityExtraBundle\\Metadata\\Driver\\AnnotationConverter',
+                82 => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Interception\\MethodInvocation',
             ),
         );
     }
