@@ -1,5 +1,6 @@
 <?php
 	namespace Semdrops\SemdropsMobileBundle\Entity;
+	use Semdrops\SemdropsMobileBundle\Entity\Constants;
 	require_once 'functions.php';  	
 	
 	class Category {
@@ -56,17 +57,21 @@
 		
 	    public function setAllMyFathers($depth) {
 			$strToReplace= 'father#';
-			//if the string has the substring "category#"
-			if (substr_compare($this->fullname, 'category#', 0)) { //----- siempre entra!
+		/*	if (substr_compare($this->fullname, 'category#', 0)) { //----- siempre entra!
 				$strToReplace= 'category#';
 				$this->saveAFather(new Category($strToReplace)); //----- debug
+			}*/
+			//lin 66-69: para checkear que string es el que cambio, si la profundidad no cambio, significa que buscaba categorias y no padres
+			//pero seria mejor creo yo que funcionara con las lineas de codigo que estan arriba
+			$cons= new Constants();
+			if ($depth == $cons->TREEDEPTH) {
+				$strToReplace= 'category#';
 			}
 			$strQuery= array('queryLn' => "SPARQL",
 							'query' => "select ?o
 										where {
     										<".str_replace($strToReplace, 'soon#', $this->fullname)."> <semdrops:Subcategory> ?o
 										}");
-			$this->saveAFather(new Category($strQuery['query'].' --- '.$depth)); //----- debug
 			foreach (getParsedResultsFromQuery($strQuery) as $father) {	
 				$c_father= new Category($father);
 				$depth= $depth - 1;
