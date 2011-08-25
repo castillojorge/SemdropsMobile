@@ -1,0 +1,7 @@
+parameters:
+#    semdrops_semdrops_mobile.example.class: Semdrops\SemdropsMobileBundle\Example
+
+services:
+#    semdrops_semdrops_mobile.example:
+#        class: %semdrops_semdrops_mobile.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
