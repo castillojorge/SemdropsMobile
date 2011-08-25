@@ -8,8 +8,9 @@ namespace Semdrops\SemdropsMobileBundle\Entity;
 
 class ConfigVar{
             
-	public $BASECONSULTA= "http://requiem:8080/sesame/repositories/lalala/query?";//constante que se utiliza para realizar consultas a la BBDD
-	public $BASEINSERCION= "http://requiem:8080/openrdf-sesame/repositories/lalala/statements";//contante que se utiliza para realizar Post
+	public $BASECONSULTA= "http://requiem.local:8080/sesame/repositories/lalala/query?";//constante que se utiliza para realizar consultas a la BBDD
+	//http://requiem.local:8080/openrdf-workbench/repositories/NONE/repositories
+	public $BASEINSERCION= "http://requiem.local:8080/openrdf-sesame/repositories/lalala/statements";//contante que se utiliza para realizar Post
 
 
 
