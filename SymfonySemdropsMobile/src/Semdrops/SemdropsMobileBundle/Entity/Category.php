@@ -46,7 +46,7 @@
 			$strQuery= array('queryLn' => 'SPARQL',
 							'query' => "select ?o
 										where {
-    										<".str_replace('father#', 'soon#', $this->fullname)."> <semdrops:Subcategory> ?o
+    										<".str_replace('father#', 'soon#', preg_replace('/\s/', 'a22', $this->fullname))."> <semdrops:Subcategory> ?o
 										}");
 			foreach (getParsedResultsFromQuery($strQuery) as $gFather) {
 				$c_gFather= new Category($gFather);
