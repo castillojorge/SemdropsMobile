@@ -14,8 +14,15 @@ addCategory:
     pattern: /semdrops/add_category
     defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addCategory }
 
-addCategoryphp:
-    pattern: /add_categoryphp
-    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addCategoryphp }
+doneCategory:
+    pattern: /donecategory
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneCategory}
 
+addPropertyTag:
+    pattern: /semdrops/add_propertyTag
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addPropertyTag }
+
+donePropertyTag:
+    pattern: /semdrops/doneproperty
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:donePropertyTag }
 
