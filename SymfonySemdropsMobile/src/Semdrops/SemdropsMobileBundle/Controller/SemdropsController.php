@@ -5,6 +5,8 @@
 	use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 	use Semdrops\SemdropsMobileBundle\Entity\Link;
 	use Semdrops\SemdropsMobileBundle\Entity\CategoryForm;
+    use Semdrops\SemdropsMobileBundle\Entity\PropertyTagsForm;
+    use Semdrops\SemdropsMobileBundle\Entity\Sesame;
   		
 	class SemdropsController extends Controller {
 		
@@ -49,7 +51,7 @@
  		}
 
   		// Recibe los datos del fomulario y manda a imprimirlos a la base de datos
-		public function addCategoryphpAction() {
+		public function doneCategoryAction() {
 			$request= $this->get('request');
 			$aCategory = new CategoryForm();
 			$form = $this->get('form.factory')->createBuilder('form', $aCategory)
@@ -57,13 +59,45 @@
 					->add('category','text')
 					->getForm();
 			$form->bindRequest($request);
-			$link= new Link($aCategory->getUri());
-			if ($link->setCategory($aCategory->getCategory())) {
+			$BD= new Sesame();
+			if ($BD->writeACategory($aCategory)) {
 				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:mostrarcategory.html.twig', array('form'=>$aCategory));
 			}
             else {
             	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aCategory));
 			}  
   		}
+	    public function addPropertyTagAction()
+  		  {
+		     $property = new PropertyTagsForm();
+		     $form= $this->get('form.factory') -> createBuilder('form',$property)
+					->add('uri','url')
+					->add('propertyTag','text')
+                    ->add('destino', 'url')
+					->getForm();
+			return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addPropertyTag.html.twig', array('form'=>$form->createView()));
+		  }
+		public function donePropertyTagAction()
+		{
+		  	$request= $this->get('request');
+			$aProperty = new PropertyTagsForm();
+			$form = $this->get('form.factory')->createBuilder('form', $aProperty)
+					->add('uri','url')
+					->add('propertyTag','text')
+					->add('destino','url')
+					->getForm();
+			$form->bindRequest($request);
+			//$datos= '<'.$aProperty->getUri().'> <property:'.$aProperty->getPropertyTag().'> <'.$aProperty->getDestino().'>.';
+			$BD = new Sesame();
+			if ($BD-> writeAProperty($aProperty)) {
+				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:donePropertyTag.html.twig', array('form'=>$aProperty));
+			}
+            else {
+            	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aProperty));
+			}  
+	    }
+	    
+	    
+	    
 	}
 ?>
