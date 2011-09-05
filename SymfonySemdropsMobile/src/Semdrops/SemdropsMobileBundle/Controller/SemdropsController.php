@@ -87,7 +87,6 @@
 					->add('destino','url')
 					->getForm();
 			$form->bindRequest($request);
-			//$datos= '<'.$aProperty->getUri().'> <property:'.$aProperty->getPropertyTag().'> <'.$aProperty->getDestino().'>.';
 			$BD = new Sesame();
 			if ($BD-> writeAProperty($aProperty)) {
 				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:donePropertyTag.html.twig', array('form'=>$aProperty));
