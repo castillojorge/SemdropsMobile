@@ -1,5 +1,12 @@
 <link href="{{ asset('iphone.css') }}" rel="stylesheet" type="text/css" />
-<form action="{{ path('addCategoryphp') }}" method="POST" {{form_enctype(form)}}>
+{% block head %}
+<HEAD>
+<TITLE>Category - Semdrops Mobile</TITLE>
+</HEAD> 
+{% endblock %}
+{% block title %} Semdrops Mobile - Add Category{% endblock %}<br>
+<form action="{{ path('doneCategory') }}" method="POST" {{form_enctype(form)}}>
+   <br>
    {{form_label(form.uri,'Here go your uri: ')}} 
    <br>
    {{form_widget(form.uri)}}
@@ -8,7 +15,7 @@
    <br>
    {{form_widget(form.category)}}
    <br>
-   <br><input type="submit" value ="Add"/>
+   <input type="submit" value ="Add"/>
    <input type="reset" value="Clear"><br><br>
 
 

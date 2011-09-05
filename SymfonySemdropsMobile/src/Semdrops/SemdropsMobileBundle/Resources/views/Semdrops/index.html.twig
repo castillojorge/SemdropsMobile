@@ -1,3 +1,6 @@
+{% block head %}
+<TITLE>Semdrops Mobile</TITLE>
+{% endblock%}
 {% block title %} Semdrops Mobile {% endblock %}
 {% block stylesheets %}
 	<link rel="stylesheet" type="text/css" href="{{ asset('/style/iPhone.css') }}"/>
@@ -8,4 +11,5 @@
 	</p>
 	<p><a href= "{{ path('getCategories') }}" class= "white button">Get Categories</a></p>
 	<p><a href= "{{ path('addCategory') }}" class= "white button">Add Categories</a></p>
+	<p><a href= "{{ path('addPropertyTag') }}" class= "white button">Add Property Tag</a></p>
 {% endblock %}

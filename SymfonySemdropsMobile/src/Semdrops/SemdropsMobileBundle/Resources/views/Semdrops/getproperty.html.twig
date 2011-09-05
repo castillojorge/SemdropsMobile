@@ -1,0 +1,13 @@
+{% block head %}
+<TITLE>Get Property - Semdrops Mobile</TITLE>
+{% endblock%}
+{% block title %} Semdrops Mobile - Get Property {% endblock %}
+{% block body %}
+	<form action="{{ path('showProperty') }}" method="post" {{ form_enctype(form) }}>
+		Here goes the URI: {{ form_widget(form.uri) }} <br>
+	
+		{{ form_rest(form) }} {# recommended #}
+
+		<input type="submit" value="Show Tags"/>
+	</form>
+{% endblock %}
