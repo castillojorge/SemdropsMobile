@@ -1,1 +1,0 @@
-function clickclear(b,a){if(b.value==a){b.value=""}}function clickrecall(b,a){if(b.value==""){b.value=a}};
