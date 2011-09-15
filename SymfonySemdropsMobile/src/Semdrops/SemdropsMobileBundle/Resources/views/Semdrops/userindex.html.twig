@@ -1,7 +1,0 @@
-{% block title %} Semdrops Mobile {% endblock %}
-{% block body %}
-	Hello {{app.user.username}}!<br> {# The app.user variable is how you access the currently logged in user. #}
-	This is the index of Semdrops Mobile.<br>
-	<a href= "{{ path('gettags') }}">Get tags from a wiki.</a><br>
-	<a href= "{{ path('logout') }}">Log Out.</a>
-{% endblock %}
