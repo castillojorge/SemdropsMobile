@@ -24,21 +24,12 @@ class Sesame {
 	} 
 	public function getProperties($aLink){
 	$urls = new Constants();	
-	/*select ?o  
-     where {
-     <http://es.wikipedia.org/wiki/Argentina> ?p ?o
-     FILTER regex(str(?p),"property:")}*/
 	$strQuery= array('queryLn' => "SPARQL",
 							'query' => 	'select ?p ?o  
                                         where {
                                         <'.$aLink->getUri().'> ?p ?o
                                           FILTER regex(str(?p),"http://semdrops.lifia.edu.ar/ns/property#")}');
-							/*"select ?o  
-										where {
-    											<".$aLink->getUri()."> ?p ?o
-    									FILTER regex(str(?p),"."property:".")
-										}");*/
-	  return cortarTextoParaProperty(getParsedResultsFromQuery($strQuery));
+	return cortarTextoParaProperty(getParsedResultsFromQuery($strQuery));
 	   
 	  
 	  
