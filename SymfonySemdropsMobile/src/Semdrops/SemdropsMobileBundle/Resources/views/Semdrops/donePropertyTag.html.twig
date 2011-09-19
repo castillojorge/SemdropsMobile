@@ -1,0 +1,10 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Property Tag Saved{% endblock %}
+{% block content %}
+    <br>
+    Uri: {{ form.uri() }} <br>
+    Property: {{ form.propertyTag() }} <br>
+    Destino: {{ form.destino() }}<br>
+<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
+

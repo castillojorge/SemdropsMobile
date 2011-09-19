@@ -1,0 +1,7 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Error{% endblock %}
+{% block content %}
+	 NO SE PUDO REALIZAR CONEXION CON EL SERVIDOR
+	<br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
