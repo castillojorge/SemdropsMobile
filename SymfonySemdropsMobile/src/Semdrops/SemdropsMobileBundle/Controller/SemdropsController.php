@@ -5,10 +5,9 @@
 	use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 	use Semdrops\SemdropsMobileBundle\Entity\Link;
 	use Semdrops\SemdropsMobileBundle\Entity\CategoryForm;
-    use Semdrops\SemdropsMobileBundle\Entity\PropertyTagsForm;
     use Semdrops\SemdropsMobileBundle\Entity\Sesame;
-        use Semdrops\SemdropsMobileBundle\Entity\AttributeTagsForm;
-  		
+    use Semdrops\SemdropsMobileBundle\Entity\PropertyTags;
+  	use Semdrops\SemdropsMobileBundle\Entity\AttributeTags;
 	class SemdropsController extends Controller {
 		
 		public function indexAction() {				
@@ -70,7 +69,7 @@
   		}
 	    public function addPropertyTagAction()
   		  {
-		     $property = new PropertyTagsForm();
+		     $property = new PropertyTags();
 		     $form= $this->get('form.factory') -> createBuilder('form',$property)
 					->add('uri','url')
 					->add('propertyTag','text')
@@ -81,15 +80,14 @@
 		public function donePropertyTagAction()
 		{
 		  	$request= $this->get('request');
-			$aProperty = new PropertyTagsForm();
+			$aProperty = new PropertyTags();
 			$form = $this->get('form.factory')->createBuilder('form', $aProperty)
 					->add('uri','url')
 					->add('propertyTag','text')
 					->add('destino','url')
 					->getForm();
 			$form->bindRequest($request);
-			$BD = new Sesame();
-			if ($BD-> writeAProperty($aProperty)) {
+			if ($aProperty->writeAProperty()) {
 				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:donePropertyTag.html.twig', array('form'=>$aProperty));
 			}
             else {
@@ -98,8 +96,8 @@
 	    }
 	    
 	       	public function getPropertiesAction()  {
-			$link= new Link('');
-			$form= $this->get('form.factory')->createBuilder('form', $link)
+			$property= new PropertyTags;
+			$form= $this->get('form.factory')->createBuilder('form', $property)
 						->add('uri', 'url')
 						->getForm();
 			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:getproperties.html.twig', array('form' => $form->createView()));
@@ -108,16 +106,15 @@
 		public function showPropertiesAction() {
 			$request= $this->get('request');
 			if ($request->getMethod() == 'POST') {
-				$filledLink= new Link('');
-				$form= $this->get('form.factory')->createBuilder('form', $filledLink)
+				$property= new PropertyTags();
+				$form= $this->get('form.factory')->createBuilder('form', $property)
 							->add('uri', 'url')
 							->getForm();		
 				$form->bindRequest($request); //xml to form and, somehow, to filledLink.
-				$sesame=new Sesame();
-				$result=$sesame->getProperties($filledLink);
+				$result=$property->getAProperty();
 				if ($form->isValid()) {
 					return $this->render('SemdropsSemdropsMobileBundle:Semdrops:showproperties.html.twig',
-										array('link' => $filledLink->getUri(), 'result'=>$result));
+										array('link' => $property->getUri(), 'result'=>$result));
 				}
 			}
 			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:showcategories_error.html.twig');
@@ -126,7 +123,7 @@
 		
 		  public function addAttributeTagAction()
   		  {
-		     $attribute = new AttributeTagsForm();
+		     $attribute = new AttributeTags();
 		     $form= $this->get('form.factory') -> createBuilder('form',$attribute)
 					->add('uri','url')
 					->add('attributeTag','text')
@@ -138,15 +135,14 @@
 		public function doneAttributeTagAction()
 		{
 		  	$request= $this->get('request');
-			$aAttribute = new AttributeTagsForm();
+			$aAttribute = new AttributeTags();
 			$form = $this->get('form.factory')->createBuilder('form', $aAttribute)
 					->add('uri','url')
 					->add('attributeTag','text')
                     ->add('target','text')
 					->getForm();
 			$form->bindRequest($request);
-			$BD = new Sesame();
-			if ($BD-> writeAAttribute($aAttribute)) {
+			if ($aAttribute-> writeAttributeTag()) {
 				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:doneAttributeTag.html.twig', array('form'=>$aAttribute));
 			}
             else {
@@ -155,8 +151,8 @@
 	    }
 	    
 	     	public function getAttributesAction()  {
-			$link= new Link('');
-			$form= $this->get('form.factory')->createBuilder('form', $link)
+			$attribute= new AttributeTags();
+			$form= $this->get('form.factory')->createBuilder('form', $attribute)
 						->add('uri', 'url')
 						->getForm();
 			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:getattributes.html.twig', array('form' => $form->createView()));
@@ -165,16 +161,15 @@
 		public function showAttributesAction() {
 			$request= $this->get('request');
 			if ($request->getMethod() == 'POST') {
-				$filledLink= new Link('');
-				$form= $this->get('form.factory')->createBuilder('form', $filledLink)
+				$attribute= new AttributeTags();
+				$form= $this->get('form.factory')->createBuilder('form', $attribute)
 							->add('uri', 'url')
 							->getForm();		
 				$form->bindRequest($request); //xml to form and, somehow, to filledLink.
-				$sesame=new Sesame();
-				$result=$sesame->getAttributes($filledLink);
+				$result=$attribute->getAttributes();
 				if ($form->isValid()) {
 					return $this->render('SemdropsSemdropsMobileBundle:Semdrops:showattributes.html.twig',
-										array('link' => $filledLink->getUri(), 'result'=>$result));
+										array('link' => $attribute->getUri(), 'result'=>$result));
 				}
 			}
 			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:showcategories_error.html.twig');
