@@ -15,18 +15,23 @@ Class propertiesTest extends TestCase
     }
   public function testAddAttributes()
    {
-	$this-> attribute-> setUri('http://www.ole.com.ar/');
-	$this-> attribute-> setAttributeTag('DiarioOle');
-	$this-> attribute-> setTarget('DiarioOle');
-	$this -> assertTrue($this->attribute->writeAttributeTag());
+	$this-> attribute-> setUri('http://www.webTest.com.ar/');
+	$this-> attribute-> setAttributeTag('TestAttribute');
+	$this-> attribute-> setTarget('2011');
+	$this -> assertTrue($this->attribute->writeAttributeTag());//escribe un attribute en la BD
+	$a= $this-> attribute-> getAttributes();//guarda en la variable un arreglo con las attributes
+    $this-> assertContains('TestAttribute', $a[0]);
+    $this-> assertNotContains('TestFailure', $a[0]);
 	}
     public function testGetAttributes()
  { 
-    $url='http://requiem.local:8080/openrdf-workbench/repositories/lalala/query?';
-	$this-> attribute-> setUri('http://www.ole.com.ar/');
-	$a= $this-> attribute-> getAttributes();
-	//$b= $a[0];
-    $this-> assertContains("DiarioOlett", $a[0]);
+	$this-> attribute-> setUri('http://www.TestSemdrops.com.ar/');
+	$this-> attribute-> setAttributeTag('TestAttribute');
+	$this-> attribute-> setTarget('2011');
+	$Ok= $this->attribute->writeAttributeTag();//escribe un attribute en la BD
+   	$a= $this-> attribute-> getAttributes();//guarda en la variable un arreglo con las attributes
+    $this-> assertContains('TestAttribute', $a[0]);
+    $this-> assertNotContains('TestFailure', $a[0]);
   }
  }
 ?>
