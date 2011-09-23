@@ -18,18 +18,20 @@ Class propertiesTest extends TestCase
     $this->propertyTags ->setUri('http://www.ole.com.ar');
     $this->propertyTags ->setPropertyTag('OleAscenso');
     $this->propertyTags ->setDestino('http://www.ole.com.ar/futbol-ascenso/b-nacional');
-    $this -> assertTrue($this->propertyTags->writeAProperty()); 
-    $s=$this->propertyTags->getAProperty();
-    $this-> assertContains('OleAscenso', $s[0]);
+    $this -> assertTrue($this->propertyTags->writeAProperty()); //escribe una property en la BD
+    $p=$this->propertyTags->getAProperty();//guarda en la variable un arreglo con las property
+    $this-> assertContains('OleAscenso', $p[0]);
+    $this-> assertNotContains('TestFailure', $p[0]);
 	}
    public function testGetProperties()
  {
 	$this->propertyTags ->setUri('http://www.ole.com.ar'); 
     $this->propertyTags ->setPropertyTag('Ascenso');
     $this->propertyTags ->setDestino('http://www.ole.com.ar/futbol-ascenso/b-nacional');
-    $Ok=$this->propertyTags->writeAProperty();//escribe la property en la BD
-    $s=$this->propertyTags->getAProperty();
-    $this-> assertContains('Ascenso', $s[0]);
+    $Ok=$this->propertyTags->writeAProperty();//escribe una property en la BD
+    $p=$this->propertyTags->getAProperty();//guarda en la variable un arreglo con las property
+    $this-> assertContains('Ascenso', $p[0]);
+    $this-> assertNotContains('TestFailure', $p[0]);
   }
  }
 ?>
