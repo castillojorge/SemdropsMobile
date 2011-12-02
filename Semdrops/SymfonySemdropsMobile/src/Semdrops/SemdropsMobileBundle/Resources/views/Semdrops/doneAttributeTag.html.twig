@@ -1,0 +1,13 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Attribute Tag Saved{% endblock %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+    <br>
+    Uri: {{ form.uri() }} <br>
+    Attribute: {{ form.attributeTag() }} <br>
+    Target: {{ form.Target() }}<br>
+<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
+

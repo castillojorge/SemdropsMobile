@@ -1,0 +1,29 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Change Pass{% endblock %}
+{% block content %}
+Hi User {{user.nombre_usuario}}, you need change Pass for login in the page Semdrops Mobile
+
+	<form action="{{ path('doneChangePassRec') }}" method="POST" {{form_enctype(form)}}>
+	    <br>
+	   {{form_label(form.clave,'Here go your actual Pass: ')}} 
+	   <br>
+	   {{form_widget(form.clave)}}
+	   <br>
+	   {{form_label(form.clave2,'Here go your New Pass: ')}}
+	   <br>
+	   {{form_widget(form.clave2)}}
+	   <br>
+	   {{form_label(form.clave3,'Here go your another New Pass: ')}}
+	   <br>
+	   {{form_widget(form.clave3)}}
+	   <br>
+	   <br>
+	   <input type="submit" value ="Change" class= "resetButtonStyle white button" />
+	   <input type="reset" value="Clear" class= "resetButtonStyle white button" /><br><br>
+	</form>
+	
+	{% if msj !='' %}
+    {{ msj }}
+{% endif%}
+{% endblock %}
+

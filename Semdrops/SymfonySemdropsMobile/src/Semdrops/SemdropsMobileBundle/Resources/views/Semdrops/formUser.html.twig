@@ -1,0 +1,26 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Welcome to Semdrops Mobile{% endblock %}
+{% block content %}
+
+	<form action="{{ path('validar') }}" method="POST" {{form_enctype(form)}}>
+	   <br>
+	   {{form_label(form.nombre_usuario,'Here go your user name: ')}} 
+	   <br>
+	   {{form_widget(form.nombre_usuario)}}
+	   <br>
+	   {{form_label(form.clave,'Here go your Pass: ')}}
+	   <br>
+	   {{form_widget(form.clave)}}
+	   <br>
+	   <br>
+	   <input type="submit" value ="Ingresar" class= "resetButtonStyle white button" />
+	   <input type="reset" value="Clear" class= "resetButtonStyle white button" /><br><br>
+	</form>
+{% if msj !='' %}
+    {{ msj }}
+{% endif%}<br>
+	<a href="{{ path('addUser') }}"> No account? register here</a> <br>
+	<a href="{{ path('changePass') }}"> Forgot your password?</a>
+
+
+{% endblock %}

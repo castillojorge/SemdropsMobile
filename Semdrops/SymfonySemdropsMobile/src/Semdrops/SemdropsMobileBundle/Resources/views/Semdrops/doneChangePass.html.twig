@@ -1,0 +1,9 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Password Changed{% endblock %}
+{% block content %}
+
+    Hi user, {{ form.nombre_usuario() }} your new password has been sent to your email
+    
+<input type= "button" onclick= "location.href='{{ path('login') }}'" value="Go Back to Login" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
+

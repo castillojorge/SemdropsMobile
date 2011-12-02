@@ -1,0 +1,19 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Show Attributes{% endblock %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+	Attributes of the wiki <b>{{ link }}</b>:
+	<br><br>
+     {% for datos in result %}
+       
+        {{ datos }}
+            <br>
+    {% endfor %}
+    <br>
+    
+	<input type= "button" onclick= "location.href='{{ path('addAttributeTag') }}'" value="Add a AttributeTag" name="addCategoryButton" class= "resetButtonStyle white button"/><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+
+{% endblock %}

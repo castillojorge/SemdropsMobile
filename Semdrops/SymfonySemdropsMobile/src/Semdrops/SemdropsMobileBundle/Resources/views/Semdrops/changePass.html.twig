@@ -1,0 +1,22 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Change Pass{% endblock %}
+{% block content %}
+
+	<form action="{{ path('doneChangePass') }}" method="POST" {{form_enctype(form)}}>
+	    <br>
+	   {{form_label(form.nombre_usuario,'Here go your user name: ')}} 
+	   <br>
+	   {{form_widget(form.nombre_usuario)}}
+	   <br>
+	   <br>
+	   <input type="submit" value ="Change pass" class= "resetButtonStyle white button" />
+	   <input type="reset" value="Clear" class= "resetButtonStyle white button" /><br><br>
+	</form>
+	
+	{% if msj !='' %}
+    {{ msj }}
+{% endif%}<br>
+	
+
+{% endblock %}
+

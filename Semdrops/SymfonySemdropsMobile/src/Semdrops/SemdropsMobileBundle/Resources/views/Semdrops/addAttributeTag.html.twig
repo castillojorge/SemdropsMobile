@@ -1,0 +1,24 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Set a Attribute Tag{% endblock %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+	<form action="{{ path('doneAttributeTag') }}" method="POST" {{form_enctype(form)}}>
+	   <br>
+	   {{form_label(form.uri,'Here go your uri: ')}} 
+	   <br>
+	   {{form_widget(form.uri)}}
+	   <br>
+	   {{form_label(form.attributeTag,'Here go your Attribute Tag: ')}}
+	   <br>
+	   {{form_widget(form.attributeTag)}}
+	   <br>
+	   {{form_label(form.target,'Here go your Target: ')}}
+	   <br>
+	   {{form_widget(form.target)}}
+	   <br>
+	   <input type="submit" value ="Add" class= "resetButtonStyle white button" />
+	   <input type="reset" value="Clear" class= "resetButtonStyle white button" /><br><br>
+	</form>
+{% endblock %}

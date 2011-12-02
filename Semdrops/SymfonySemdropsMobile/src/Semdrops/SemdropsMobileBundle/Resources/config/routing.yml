@@ -1,0 +1,84 @@
+homepage:
+    pattern:  /semdrops/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:index }
+login:
+    pattern:  /
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:index2 }
+logout:
+    pattern:  /semdrops/logout
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:logout }
+validar:
+    pattern:  /semdrops/validar
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:validar }
+addUser:
+    pattern:  /semdrops/addUser
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addUser }
+doneAddUser:
+    pattern:  /semdrops/doneAddUser
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneAddUser }
+getCategories:
+    pattern: /semdrops/get_categories/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:getCategories }
+
+showCategories:
+    pattern: /semdrops/show_categories/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:showCategories }
+
+addCategory:
+    pattern: /semdrops/add_category
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addCategory }
+
+doneCategory:
+    pattern: /donecategory
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneCategory}
+
+addPropertyTag:
+    pattern: /semdrops/add_propertyTag
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addPropertyTag }
+
+donePropertyTag:
+    pattern: /semdrops/doneproperty
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:donePropertyTag }
+
+getProperties:
+    pattern: /semdrops/get_properties/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:getProperties }    
+    
+showProperties:
+    pattern: /semdrops/show_properties/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:showProperties }
+
+addAttributeTag:
+    pattern: /semdrops/add_attributeTag
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:addAttributeTag }
+
+doneAttributeTag:
+    pattern: /semdrops/doneattribute
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneAttributeTag }
+    
+getAttributes:
+    pattern: /semdrops/get_attributes/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:getAttributes }    
+    
+showAttributes:
+    pattern: /semdrops/show_attributes/
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:showAttributes }
+
+changePass:
+    pattern: /semdrops/changePass
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:changePass }  
+    
+doneChangePass:
+    pattern: /semdrops/doneChangePass
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneChangePass }    
+
+changePassRec:
+    pattern: /semdrops/changePassRec
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:changePassRec }  
+    
+doneChangePassRec:
+    pattern: /semdrops/doneChangePassRec
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneChangePassRec }   
+       
+    
+
