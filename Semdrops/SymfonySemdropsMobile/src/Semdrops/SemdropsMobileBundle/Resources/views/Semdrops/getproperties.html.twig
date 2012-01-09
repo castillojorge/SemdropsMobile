@@ -1,0 +1,17 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Get Properties{% endblock %}
+{% javascripts '@SemdropsSemdropsMobileBundle/Resources/public/scripts/*' filter= 'yui_js' %}
+	<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+	<form action="{{ path('showProperties') }}" method="post" onSubmit= "return validate_url(" form.uri ")" {{ form_enctype(form) }}>
+		Here goes the URI: {{ form_widget(form.uri) }} <br>
+		{{ form_rest(form) }} {# recommended #}
+		<!--<input type= "text" name= "url" value="Here goes your URI" onclick= "clickclear(this, 'Here goes your URI')" onblur= "clickrecall(this,'Here goes your URI')" />-->
+		<input type="submit" value="Show Properties" class= "resetButtonStyle white button" />
+	</form><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back" name="gobackButton" class= "resetButtonStyle white button" />	
+{% endblock %}

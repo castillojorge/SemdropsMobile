@@ -1,0 +1,12 @@
+div#bodyContent {
+    line-height: 1.5em;
+}
+load.p...ector&* (línea 1)
+#bodyContent {
+    position: relative;
+    width: 50%;
+}
+load.p...ector&* (línea 1)
+#bodyContent {
+    font-size: 0.8em;
+}

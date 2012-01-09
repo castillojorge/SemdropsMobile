@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Ejercicio 8 - DOM</title>
+ 
+<script type="text/javascript">
+window.onload = function() {
+  // Todos los enlaces deben cambiarse por un protocolo más seguro: "https://"
+  var enlaces = document.getElementsByTagName("a");
+  for(var i=0; i<enlaces.length; i++) {
+    var href_anterior = enlaces[i].getAttribute('href');
+    var nuevo_href = href_anterior.replace('http://', "https://jorge/");
+    // También se puede utilizar la función split()
+    // var trozos = href_anterior.split('://');
+    // var nuevo_href = 'https://' + trozos[1];
+    enlaces[i].setAttribute('href', nuevo_href);
+  }
+ 
+  // Los parrafos cuyo class="importante" se modifica por class="resaltado"
+  // y el resto de parrafos se les añade class="normal"
+  // Solución al problema de setAttribute() en Internet Explorer extraída de
+  // http://www.digitalmediaminute.com/article/1394/the-browser-dom-and-the-class-attribute
+  var nombreAtributoClass = document.all ? 'className' : 'class';
+ 
+  var parrafos = document.getElementsByTagName("p");
+  for(var i=0; i<parrafos.length; i++) {
+    if(parrafos[i].getAttribute(nombreAtributoClass) == 'importante') {
+      parrafos[i].setAttribute(nombreAtributoClass, "resaltado");
+    }
+    else {
+      parrafos[i].setAttribute(nombreAtributoClass, "normal");
+    }
+  }
+ 
+  // Enlaces cuyo class="importante", se les añade el atributo "name" con un valor
+  // autogenerado que sea igual a importante+i, donde i empieza en 0
+  var enlaces = document.getElementsByTagName("a");
+  var j=0;
+  for(var i=0; i<enlaces.length; i++) {
+    if(enlaces[i].getAttribute(nombreAtributoClass) == 'importante') {
+      enlaces[i].setAttribute('name', 'importante'+j);
+      j++;
+    }
+  }
+}
+</script>
+</head>
+ 
+<body>
+<p>Lorem ipsum dolor sit amet, <a class="importante" href="http://www.prueba.com">consectetuer adipiscing elit</a>. Sed mattis enim vitae orci. Phasellus libero. Maecenas nisl arcu, consequat congue, commodo nec, commodo ultricies, turpis. Quisque sapien nunc, posuere vitae, rutrum et, luctus at, pede. Pellentesque massa ante, ornare id, aliquam vitae, ultrices porttitor, pede. Nullam sit amet nisl elementum elit convallis malesuada. Phasellus magna sem, semper quis, faucibus ut, rhoncus non, mi. <a class="importante" href="http://prueba2">Fusce porta</a>. Duis pellentesque, felis eu adipiscing ullamcorper, odio urna consequat arcu, at posuere ante quam non dolor. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis scelerisque. Donec lacus neque, vehicula in, eleifend vitae, venenatis ac, felis. Donec arcu. Nam sed tortor nec ipsum aliquam ullamcorper. Duis accumsan metus eu urna. Aenean vitae enim. Integer lacus. Vestibulum venenatis erat eu odio. Praesent id metus.</p>
+ 
+<p class="importante">Aenean at nisl. Maecenas egestas dapibus odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin consequat auctor diam. <a href="http://prueba">Ut bibendum blandit est</a>. Curabitur vestibulum. Nunc malesuada porttitor sapien. Aenean a lacus et metus venenatis porta. Suspendisse cursus, sem non dapibus tincidunt, lorem magna porttitor felis, id sodales dolor dolor sed urna. Sed rutrum nulla vitae tellus. Sed quis eros nec lectus tempor lacinia. Aliquam nec lectus nec neque aliquet dictum. Etiam <a href="http://prueba3">consequat sem quis massa</a>. Donec aliquam euismod diam. In magna massa, mattis id, pellentesque sit amet, porta sit amet, lectus. Curabitur posuere. Aliquam in elit. Fusce condimentum, arcu in scelerisque lobortis, ante arcu scelerisque mi, at cursus mi risus sed tellus.</p>
+ 
+<p>Donec sagittis, nibh nec ullamcorper tristique, <span class="importante">pede velit feugiat massa</span>, at sollicitudin justo tellus vitae justo. Vestibulum aliquet, nulla sit amet imperdiet suscipit, nunc erat laoreet est, a <a href="http://prueba">aliquam leo odio sed sem</a>. Quisque eget eros vehicula diam euismod tristique. Ut dui. Donec in metus sed risus laoreet sollicitudin. Proin et nisi non arcu sodales hendrerit. In sem. Cras id augue eu lorem dictum interdum. Donec pretium. Proin <a href="http://prueba4">egestas</a> adipiscing ligula. Duis iaculis laoreet turpis. Mauris mollis est sit amet diam. Curabitur hendrerit, eros quis malesuada tristique, ipsum odio euismod tortor, a vestibulum nisl mi at odio. <a class="importante" href="http://prueba5">Sed non lectus non est pellentesque</a> auctor.</p>
+<script>
+alert('oloa');
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Show Categories{% endblock %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+	Categories of the wiki <b>{{ link }}</b>:
+	
+	{% include 'SemdropsSemdropsMobileBundle:Semdrops:showcategories_recursive.html.twig' with {'tree': categories} %}
+	
+	<input type= "button" onclick= "location.href='{{ path('addCategory') }}'" value="Add a Category" name="addCategoryButton" class= "resetButtonStyle white button"/><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Password Changed{% endblock %}
+{% block content %}
+
+    Your Pass has changed correctly.
+    
+<input type= "button" onclick= "location.href='{{ path('logout') }}'" value="Go Back to Login" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
+

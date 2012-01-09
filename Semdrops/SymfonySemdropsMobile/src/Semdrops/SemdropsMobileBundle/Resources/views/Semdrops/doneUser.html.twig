@@ -1,0 +1,12 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Attribute Tag Saved{% endblock %}
+{% block content %}
+
+    Name User: {{ form.nombre_usuario() }} <br>
+    Pass: {{ form.clave() }} <br>
+    Name: {{ form.nombre() }}<br>
+    Surname: {{ form.apellido() }}<br>
+    Email:  {{ form.email}}
+<input type= "button" onclick= "location.href='{{ path('login') }}'" value="Go Back to Main" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
+

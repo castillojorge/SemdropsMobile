@@ -1,0 +1,10 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhoneObject.html.twig" %}
+{% block header %}Category Tag Saved{% endblock %}
+{% block content %}
+    <br><br>
+    Uri: {{ form.uri() }} <br>
+    Category: {{ form.category() }} <br>
+
+	<input type= "button" onclick="javascript:window.history.go(-2)" value="Go Back to Page" name="gobackButton"  class= "resetButtonStyle white button" />
+
+{% endblock %}

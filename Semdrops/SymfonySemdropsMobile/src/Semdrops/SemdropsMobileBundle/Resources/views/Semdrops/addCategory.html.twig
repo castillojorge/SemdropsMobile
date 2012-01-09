@@ -1,0 +1,21 @@
+{% extends "SemdropsSemdropsMobileBundle::baseForIPhone.html.twig" %}
+{% block header %}Set a Category{% endblock %}
+{% block content %}
+<div align="right" >
+<a href= {{ path('logout')}}>cerrar sesion</a>
+</div>
+	<form action="{{ path('doneCategory') }}" method="POST" {{form_enctype(form)}}>
+	   <br>
+	   {{form_label(form.uri,'Here go your uri: ')}} 
+	   <br>
+	   {{form_widget(form.uri)}}
+	   <br>
+	   {{form_label(form.category,'Here go your category: ')}}
+	   <br>
+	   {{form_widget(form.category)}}
+	   <br>
+	   <input type="submit" value ="Add" class= "resetButtonStyle white button" />
+	   <input type="reset" value="Clear" class= "resetButtonStyle white button" /><br><br>
+	</form>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back" name="gobackButton" class= "resetButtonStyle white button" />
+{% endblock %}
