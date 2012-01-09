@@ -12,5 +12,6 @@
 		{{ form_rest(form) }} {# recommended #}
 		<!--<input type= "text" name= "url" value="Here goes your URI" onclick= "clickclear(this, 'Here goes your URI')" onblur= "clickrecall(this,'Here goes your URI')" />-->
 		<input type="submit" value="Show Categories" class= "resetButtonStyle white button" />
-	</form>
+	</form><br>
+	<input type= "button" onclick= "location.href='{{ path('homepage') }}'" value="Go Back" name="gobackButton" class= "resetButtonStyle white button" />	
 {% endblock %}

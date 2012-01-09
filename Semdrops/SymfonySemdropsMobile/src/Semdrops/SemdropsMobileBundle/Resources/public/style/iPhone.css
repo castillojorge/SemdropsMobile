@@ -112,3 +112,16 @@ ul {
 {
 overflow:auto;
 }	
+
+#tag
+{
+  
+  margin: 100px;
+  width: 49%;
+  background:black;
+  height:500px;
+}
+#titleObject
+{
+color:#9000A1;
+}

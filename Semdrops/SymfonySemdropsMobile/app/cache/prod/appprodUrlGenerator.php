@@ -35,6 +35,12 @@ class appprodUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
        'doneChangePass' => true,
        'changePassRec' => true,
        'doneChangePassRec' => true,
+       'tag' => true,
+       'tagForm' => true,
+       'procesarTag' => true,
+       'doneCategoryObject' => true,
+       'doneAttributeTagObject' => true,
+       'donePropertyTagObject' => true,
     );
 
     /**
@@ -166,5 +172,35 @@ class appprodUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
     private function getdoneChangePassRecRouteInfo()
     {
         return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneChangePassRecAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/doneChangePassRec',  ),));
+    }
+
+    private function gettagRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::TagAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/tag',  ),));
+    }
+
+    private function gettagFormRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::tagFormAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/tagForm',  ),));
+    }
+
+    private function getprocesarTagRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::tagProcesadoAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/procesarTag',  ),));
+    }
+
+    private function getdoneCategoryObjectRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneCategoryObjectAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/doneCategoryObject',  ),));
+    }
+
+    private function getdoneAttributeTagObjectRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneAttributeTagObjectAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/doneAttributeTagObject',  ),));
+    }
+
+    private function getdonePropertyTagObjectRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::donePropertyTagObjectAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/semdrops/donePropertyTagObject',  ),));
     }
 }

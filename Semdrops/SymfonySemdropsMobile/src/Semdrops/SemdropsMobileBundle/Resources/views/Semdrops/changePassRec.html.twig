@@ -24,6 +24,7 @@ Hi User {{user.nombre_usuario}}, you need change Pass for login in the page Semd
 	
 	{% if msj !='' %}
     {{ msj }}
-{% endif%}
+{% endif%}<br>
+    <input type= "button" onclick= "location.href='{{ path('login') }}'" value="Go Back" name="gobackButton" class= "resetButtonStyle white button" />
 {% endblock %}
 

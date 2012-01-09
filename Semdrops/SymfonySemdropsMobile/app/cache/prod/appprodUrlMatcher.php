@@ -159,6 +159,36 @@ class appprodUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
             return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneChangePassRecAction',  '_route' => 'doneChangePassRec',);
         }
 
+        // tag
+        if ($pathinfo === '/semdrops/tag') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::TagAction',  '_route' => 'tag',);
+        }
+
+        // tagForm
+        if ($pathinfo === '/semdrops/tagForm') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::tagFormAction',  '_route' => 'tagForm',);
+        }
+
+        // procesarTag
+        if ($pathinfo === '/semdrops/procesarTag') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::tagProcesadoAction',  '_route' => 'procesarTag',);
+        }
+
+        // doneCategoryObject
+        if ($pathinfo === '/semdrops/doneCategoryObject') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneCategoryObjectAction',  '_route' => 'doneCategoryObject',);
+        }
+
+        // doneAttributeTagObject
+        if ($pathinfo === '/semdrops/doneAttributeTagObject') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::doneAttributeTagObjectAction',  '_route' => 'doneAttributeTagObject',);
+        }
+
+        // donePropertyTagObject
+        if ($pathinfo === '/semdrops/donePropertyTagObject') {
+            return array (  '_controller' => 'Semdrops\\SemdropsMobileBundle\\Controller\\SemdropsController::donePropertyTagObjectAction',  '_route' => 'donePropertyTagObject',);
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

@@ -179,12 +179,17 @@
 					return $this-> index2Action();
 			}
 			$category = new CategoryForm();
+			if(	isset( $_GET['val'])){$category->setUri( $_GET['val']);}
   			$form = $this->get('form.factory') -> createBuilder('form',$category)
 					->add('uri','url')
 					->add('category','text')
                     ->add('father', 'text')
 					->getForm();
+			if(	isset( $_GET['val'])){
+		      return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addCategoryObject.html.twig', array('form'=>$form->createView()));
+		     } 
 			return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addCategory.html.twig', array('form'=>$form->createView()));//Se redirige a la vista, para mostrar el formulario
+ 		
  		}
 
   		// Recibe los datos del fomulario y manda a imprimirlos a la base de datos
@@ -207,7 +212,25 @@
             	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aCategory));
 			}  
   		}
-  		
+  		public function doneCategoryObjectAction() {
+			if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			}
+			$request= $this->get('request');
+			$aCategory = new CategoryForm();
+			$form = $this->get('form.factory')->createBuilder('form', $aCategory)
+					->add('uri','url')
+					->add('category','text')
+					->getForm();
+			$form->bindRequest($request);
+			$BD= new Sesame();
+			if ($BD->writeACategory($aCategory)) {
+				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:mostrarcategoryObject.html.twig', array('form'=>$aCategory));
+			}
+            else {
+            	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aCategory));
+			}  
+  		}
   		//Para poder setear una Uri y guardar una propertyTag en la base de datos
 	    public function addPropertyTagAction()
   		  {
@@ -215,11 +238,15 @@
 					return $this-> index2Action();
 			}
 		     $property = new PropertyTags();
+		     if( isset( $_GET['val'])){$property->setUri( $_GET['val']);}
 		     $form= $this->get('form.factory') -> createBuilder('form',$property)
 					->add('uri','url')
 					->add('propertyTag','text')
                     ->add('destino', 'url')
 					->getForm();
+			 if( isset( $_GET['val'])){
+		      return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addPropertyTagObject.html.twig', array('form'=>$form->createView()));
+		     } 		
 			return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addPropertyTag.html.twig', array('form'=>$form->createView()));
 		  }
 		  
@@ -244,7 +271,26 @@
             	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aProperty));
 			}  
 	    }
-	    
+	    public function donePropertyTagObjectAction()
+		{
+			if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			}
+		  	$request= $this->get('request');
+			$aProperty = new PropertyTags();
+			$form = $this->get('form.factory')->createBuilder('form', $aProperty)
+					->add('uri','url')
+					->add('propertyTag','text')
+					->add('destino','url')
+					->getForm();
+			$form->bindRequest($request);
+			if ($aProperty->writeAProperty()) {
+				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:donePropertyTagObject.html.twig', array('form'=>$aProperty));
+			}
+            else {
+            	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aProperty));
+			}  
+	    }
 	    public function getPropertiesAction()  {
 			if (!isset($_SESSION["nombre_usuario"])){
 					return $this-> index2Action();
@@ -283,11 +329,15 @@
 					return $this-> index2Action();
 			} 
 		     $attribute = new AttributeTags();
+		     if(isset( $_GET['val'])){$attribute->setUri( $_GET['val']);}
 		     $form= $this->get('form.factory') -> createBuilder('form',$attribute)
 					->add('uri','url')
 					->add('attributeTag','text')
                     ->add('target','text')
 					->getForm();
+			 if( isset( $_GET['val'])){
+		      return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addAttributeTagObject.html.twig', array('form'=>$form->createView()));
+		     } 		
 			return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:addAttributeTag.html.twig', array('form'=>$form->createView()));
 		  }
 		  
@@ -311,6 +361,28 @@
             	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aAttribute));
 			}  
 	    }
+	    
+	    	public function doneAttributeTagObjectAction()
+		{
+			if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			}
+		  	$request= $this->get('request');
+			$aAttribute = new AttributeTags();
+			$form = $this->get('form.factory')->createBuilder('form', $aAttribute)
+					->add('uri','url')
+					->add('attributeTag','text')
+                    ->add('target','text')
+					->getForm();
+			$form->bindRequest($request);
+			if ($aAttribute-> writeAttributeTag()) {
+				return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:doneAttributeTagObject.html.twig', array('form'=>$aAttribute));
+			}
+            else {
+            	return $this-> render('SemdropsSemdropsMobileBundle:Semdrops:falla.html.twig', array('form'=>$aAttribute));
+			}  
+	    }
+	    
 	    
 	     	public function getAttributesAction()  {
 			if (!isset($_SESSION["nombre_usuario"])){
@@ -377,6 +449,46 @@
 
 		}			
 			
+		public function TagAction() {
+			   if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			}
+			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:tag.html.php', array('msj'=>'ola'));
+		}
+		
+		 public function tagFormAction()  {
+			if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			}	
+			$property= new PropertyTags;
+			$form= $this->get('form.factory')->createBuilder('form', $property)
+						->add('uri', 'url')
+						->getForm();
+			return $this->render('SemdropsSemdropsMobileBundle:Semdrops:tagForm.html.twig', array('form' => $form->createView()));
+		}
+		
+		public function tagProcesadoAction() {
+	        if (!isset($_SESSION["nombre_usuario"])){
+					return $this-> index2Action();
+			} 	
+			$request= $this->get('request');
+			if ($request->getMethod() == 'POST') {
+				$property= new PropertyTags();
+				$form= $this->get('form.factory')->createBuilder('form', $property)
+							->add('uri', 'url')
+							->getForm();		
+				$form->bindRequest($request); //xml to form and, somehow, to filledLink.
+					$_SESSION["uri"]=$property->getUri();
+			
+					return $this->render('SemdropsSemdropsMobileBundle:Semdrops:tag.html.php',
+										array('uri' => $property->getUri(), ));
+				}
+				return $this->render('SemdropsSemdropsMobileBundle:Semdrops:showcategories_error.html.twig');
+			}
+			
+		
+		
+		
 		
 	    
 	}

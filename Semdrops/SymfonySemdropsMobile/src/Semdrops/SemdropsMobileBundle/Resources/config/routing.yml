@@ -79,6 +79,23 @@ changePassRec:
 doneChangePassRec:
     pattern: /semdrops/doneChangePassRec
     defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneChangePassRec }   
-       
+tag:
+    pattern: /semdrops/tag
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:Tag }   
+tagForm:
+    pattern: /semdrops/tagForm
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:tagForm } 
+procesarTag:
+    pattern: /semdrops/procesarTag
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:tagProcesado }
+doneCategoryObject:
+    pattern: /semdrops/doneCategoryObject
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneCategoryObject }  
+doneAttributeTagObject:               
+    pattern: /semdrops/doneAttributeTagObject
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:doneAttributeTagObject }       
+donePropertyTagObject:               
+    pattern: /semdrops/donePropertyTagObject
+    defaults: { _controller: SemdropsSemdropsMobileBundle:Semdrops:donePropertyTagObject }       
     
 
